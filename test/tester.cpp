@@ -2,6 +2,6 @@
 #include "defs.h"
 
 int main() {
-  printf("Tester is working!\n");
+  INFO << "Tester is working!" << std::endl;
   return 0;
 }

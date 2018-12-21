@@ -1,15 +1,15 @@
 
 CC := g++
-# CC := clang --analyze # and comment out the linker last line for sanity
 
 SRCDIR := src
 BUILDDIR := build
 TARGET := bin/raytracer
+LOGS := logs
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-CFLAGS := -fopenmp -Og -g -Wall
+CFLAGS := -std=c++14 -fopenmp  -MMD -Og -g -Wall
 LIB := -pthread
 INC := -I include
 
@@ -21,12 +21,20 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
 	@echo "$(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
+-include ${DEPENDS}
+
 clean:
 	@echo "Cleaning...";
 	@echo "$(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	@echo "$(RM) logs/*"; $(RM) logs/*
 
-# Tests
 tester:
 	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
 
-.PHONY: clean
+wc:
+	@find . -name '*.cpp' -o -name '*.h' | xargs wc
+
+todo:
+	@git grep -iEI "TODO|FIXME|XXX" | egrep -v "^Makefile" | cat
+
+.PHONY: clean wc todo
