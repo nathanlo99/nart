@@ -1,5 +1,5 @@
 
-#include "sphere.h"
+#include "objects/sphere.h"
 
 #include "color.h"
 #include "ray.h"

@@ -1,5 +1,5 @@
 
-#include "model.h"
+#include "objects/model.h"
 
 #include "color.h"
 #include "defs.h"
@@ -9,7 +9,6 @@
 #include <vector>
 
 Model::Model(const std::string &name, ModelTraits option = ModelTraits::MODEL) {
-  //
   INFO << "Loading model " + name << std::endl;
 }
 

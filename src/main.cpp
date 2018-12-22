@@ -3,9 +3,9 @@
 
 #include "camera.h"
 #include "image.h"
-#include "model.h"
+#include "objects/model.h"
+#include "objects/sphere.h"
 #include "raytracer.h"
-#include "sphere.h"
 #include "vector3f.h"
 #include "world.h"
 
@@ -31,7 +31,7 @@ int main() {
   RayTracer ray_tracer; // Default resolution and FOV
 
   std::unique_ptr<Image> ray_trace_output = ray_tracer.trace(camera, world);
-  ray_trace_output->writeToFile(ImageFormat::JPG, "test.jpg");
+  ray_trace_output->write(ImageFormat::JPG, "test.jpg");
 
   INFO << "Terminating program" << std::endl;
   fclose(stdout);

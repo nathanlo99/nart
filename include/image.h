@@ -5,7 +5,7 @@
 
 #include <memory>
 
-enum ImageFormat { BMP, JPG, PNG };
+enum ImageFormat { BMP, JPG, PNG, WINDOW };
 
 // TODO
 class Image {
@@ -16,9 +16,10 @@ public:
   Image(size_t height, size_t width)
       : height{height}, width{width}, //
         data{std::make_unique<Color[]>(height * width)} {}
+  Image(ImageFormat format, const std::string &location);
   ~Image() {}
 
-  void writeToFile(ImageFormat format, const std::string &location);
+  void write(ImageFormat format, const std::string &location);
 };
 
 #endif /* end of include guard: IMAGE_H */

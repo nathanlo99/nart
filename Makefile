@@ -25,8 +25,10 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 clean:
 	@echo "Cleaning...";
-	@echo "$(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
-	@echo "$(RM) logs/*"; $(RM) logs/*
+	find build ! -type d -delete
+	$(RM) $(TARGET)
+	$(RM) logs/*
+
 
 tester:
 	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
@@ -35,6 +37,6 @@ wc:
 	@find . -name '*.cpp' -o -name '*.h' | xargs wc
 
 todo:
-	@git grep -iEI "TODO|FIXME|XXX" | egrep -v "^Makefile" | cat
+	@git grep -EI "TODO|FIXME|XXX" | egrep "^(src|test|include)" | cat
 
 .PHONY: clean wc todo

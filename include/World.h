@@ -3,7 +3,7 @@
 #define WORLD_H
 
 #include "color.h"
-#include "object.h"
+#include "objects/object.h"
 #include "ray.h"
 
 #include <memory>

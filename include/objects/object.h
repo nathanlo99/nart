@@ -2,7 +2,6 @@
 #define OBJECT_H
 
 #include "color.h"
-#include "object.h"
 #include "ray.h"
 
 #include <utility>
