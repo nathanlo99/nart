@@ -16,9 +16,9 @@ int main() {
   // Redirect stdout to log file (temporary)
   const std::string log_name =
       "logs/log_" + std::to_string(static_cast<long>(std::time(0))) + ".txt";
-  freopen(log_name.c_str(), "w", stdout);
+  const bool stdout_redirected = freopen(log_name.c_str(), "w", stdout);
 
-  INFO << "Starting program" << std::endl;
+  INFO("Starting program");
 
   Vector3f camera_loc{0, 0, 0}, look_at{1, 1, 1};
   Camera camera{camera_loc, look_at};
@@ -33,8 +33,9 @@ int main() {
   std::unique_ptr<Image> ray_trace_output = ray_tracer.trace(camera, world);
   ray_trace_output->write(ImageFormat::JPG, "test.jpg");
 
-  INFO << "Terminating program" << std::endl;
-  fclose(stdout);
-  INFO << "Log at " << log_name << std::endl;
+  INFO("Terminating program");
+  if (stdout_redirected)
+    fclose(stdout);
+  INFO("Log at " + log_name);
   return 0;
 }

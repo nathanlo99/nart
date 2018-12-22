@@ -4,11 +4,11 @@
 struct Vector3f {
   float x, y, z;
 
-  Vector3f operator+(Vector3f other) {
+  Vector3f operator+(Vector3f other) const {
     return {x + other.x, y + other.y, z + other.z};
   }
 
-  Vector3f operator-(Vector3f other) {
+  Vector3f operator-(Vector3f other) const {
     return {x + other.x, y + other.y, z + other.z};
   }
 };

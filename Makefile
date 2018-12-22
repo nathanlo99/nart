@@ -9,7 +9,8 @@ LOGS := logs
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-CFLAGS := -std=c++14 -fopenmp  -MMD -Og -g -Wall
+DEPENDS := ${OBJECTS:.o=.d}
+CFLAGS := -std=c++14 -fopenmp  -MMD -Og -g -Wall -DLOG
 LIB := -pthread
 INC := -I include
 
@@ -29,9 +30,12 @@ clean:
 	$(RM) $(TARGET)
 	$(RM) logs/*
 
-
 tester:
 	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
+
+check:
+	@echo " Checking..."
+	@cppcheck -q --report-progress -j 8 --check-library --force -I /usr/include -I include --enable=warning --enable=style --enable=performance --std=c++11 --language=c++ --suppress=missingInclude --inconclusive --suppress=information src/*
 
 wc:
 	@find . -name '*.cpp' -o -name '*.h' | xargs wc

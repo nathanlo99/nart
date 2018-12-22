@@ -10,13 +10,13 @@
 class World;
 
 class Object {
-  World *world;
 
 public:
   Object() {}
   virtual ~Object() {}
 
-  virtual std::pair<Color, std::vector<Ray>> intersect(Ray ray) const = 0;
+  virtual std::pair<Color, std::vector<Ray>>
+  intersect(const Ray &ray) const = 0;
 };
 
 #endif

@@ -9,9 +9,9 @@
 #include <vector>
 
 Model::Model(const std::string &name, ModelTraits option = ModelTraits::MODEL) {
-  INFO << "Loading model " + name << std::endl;
+  INFO("Loading model " + name);
 }
 
-std::pair<Color, std::vector<Ray>> Model::intersect(Ray ray) const {
+std::pair<Color, std::vector<Ray>> Model::intersect(const Ray &ray) const {
   return {Color{0, 0, 0}, std::vector<Ray>{}};
 }
