@@ -30,8 +30,8 @@ clean:
 	$(RM) $(TARGET)
 	$(RM) logs/*
 
-tester:
-	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
+tester: $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS:build/main.o=) test/tester.cpp $(INC) $(LIB) -o bin/tester
 
 check:
 	@echo " Checking..."
