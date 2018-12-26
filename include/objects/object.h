@@ -11,12 +11,17 @@ class World;
 
 class Object {
 
+protected:
+  World *world = nullptr;
+
 public:
   Object() {}
   virtual ~Object() {}
 
-  virtual std::pair<Color, std::vector<Ray>>
-  intersect(const Ray &ray) const = 0;
+  virtual Color intersect(const Ray &ray) const = 0;
+
+  World *getWorld() { return world; }
+  void setWorld(World *world) { this->world = world; }
 };
 
 #endif

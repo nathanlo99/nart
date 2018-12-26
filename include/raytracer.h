@@ -16,6 +16,7 @@ class RayTracer {
   size_t screen_width = 320, screen_height = 200;
   // Horizontal field of view, in degrees
   float horizontal_fov = 60;
+  size_t max_depth = 5;
 
 public:
   RayTracer() {} // take defaults

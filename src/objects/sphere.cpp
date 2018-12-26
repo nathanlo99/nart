@@ -6,6 +6,4 @@
 #include <utility>
 #include <vector>
 
-std::pair<Color, std::vector<Ray>> Sphere::intersect(const Ray &ray) const {
-  return {Color{0, 0, 0}, std::vector<Ray>{}};
-}
+Color Sphere::intersect(const Ray &ray) const { return {0, 0, 0}; }

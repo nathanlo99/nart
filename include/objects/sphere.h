@@ -14,7 +14,7 @@ public:
   Sphere(Vector3f center, float radius) : center{center}, radius{radius} {}
   ~Sphere() {}
 
-  std::pair<Color, std::vector<Ray>> intersect(const Ray &ray) const override;
+  Color intersect(const Ray &ray) const override;
 };
 
 #endif

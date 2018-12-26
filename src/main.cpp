@@ -13,11 +13,9 @@
 #include <iostream>
 
 int main() {
-  // Redirect stdout to log file (temporary)
   const std::string log_name =
       "logs/log_" + std::to_string(static_cast<long>(std::time(0))) + ".txt";
   const bool stdout_redirected = freopen(log_name.c_str(), "w", stdout);
-
   INFO("Starting program");
 
   Vector3f camera_loc{0, 0, 0}, look_at{1, 1, 1};
@@ -31,7 +29,7 @@ int main() {
   RayTracer ray_tracer; // Default resolution and FOV
 
   std::unique_ptr<Image> ray_trace_output = ray_tracer.trace(camera, world);
-  ray_trace_output->write(ImageFormat::JPG, "test.jpg");
+  ray_trace_output->write(ImageFormat::BMP, "test.bmp");
 
   INFO("Terminating program");
   if (stdout_redirected)

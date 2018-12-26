@@ -7,6 +7,7 @@
 #include <string>
 
 void Image::write(ImageFormat format, const std::string &location) {
+  // TODO
   // std::ofstream out_file{"output/" + location};
   switch (format) {
   case ImageFormat::JPG:
@@ -21,4 +22,9 @@ void Image::write(ImageFormat format, const std::string &location) {
   default:
     break;
   }
+}
+
+Color Image::at(float x, float y) const {
+  // TODO
+  return (Color){0, 0, 0};
 }
