@@ -12,4 +12,6 @@ Model::Model(const std::string &name, ModelTraits option) {
   INFO("Loading model " + name);
 }
 
-Color Model::intersect(const Ray &ray) const { return {0, 0, 0}; }
+std::pair<double, Color> Model::intersect(const Ray &ray) const {
+  return {-1, {0, 0, 0}};
+}

@@ -11,10 +11,11 @@ class Sphere : public Object {
   float radius;
 
 public:
-  Sphere(Vector3f center, float radius) : center{center}, radius{radius} {}
+  Sphere(const Vector3f &center, float radius)
+      : center{center}, radius{radius} {}
   ~Sphere() {}
 
-  Color intersect(const Ray &ray) const override;
+  std::pair<double, Color> intersect(const Ray &ray) const override;
 };
 
 #endif

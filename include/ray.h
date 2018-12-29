@@ -3,12 +3,8 @@
 
 #include "vector3f.h"
 
-class Ray {
+struct Ray {
   Vector3f start, direction;
-
-public:
-  Ray(Vector3f start, Vector3f direction)
-      : start{start}, direction{direction} {}
 };
 
 #endif /* end of include guard: RAY_H */

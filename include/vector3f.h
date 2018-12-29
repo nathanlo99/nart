@@ -10,7 +10,7 @@ template <typename T> struct Vector {
   constexpr T dot(const Vector<T> &other) const;
   constexpr T norm() const;
   constexpr Vector<T> normalize() const;
-  constexpr Vector<T> cross(const Vector<T> &other) const;
+  constexpr Vector<T> cross(const Vector<T> &v) const;
 
   std::string to_string() const;
 };

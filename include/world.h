@@ -13,7 +13,7 @@ class World {
   std::vector<std::unique_ptr<Object>> objects;
 
 public:
-  World() : objects{} {}
+  World() {}
   explicit World(std::vector<std::unique_ptr<Object>> &&objects)
       : objects{std::move(objects)} {}
   ~World() {}
@@ -22,7 +22,7 @@ public:
     objects.push_back(std::move(object));
   }
 
-  std::pair<Color, std::vector<Ray>> intersect(const Ray &ray) const;
+  Color intersect(const Ray &ray, size_t depth) const;
 };
 
 #endif

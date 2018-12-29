@@ -39,10 +39,10 @@ class Model : public Object {
   std::vector<Face> data;
 
 public:
-  explicit Model(const std::string &file_name, ModelTraits option = MODEL);
+  explicit Model(const std::string &name, ModelTraits option = MODEL);
   ~Model() {}
 
-  Color intersect(const Ray &ray) const override;
+  std::pair<double, Color> intersect(const Ray &ray) const override;
 };
 
 #endif

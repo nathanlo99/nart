@@ -18,15 +18,17 @@ int main() {
   const bool stdout_redirected = freopen(log_name.c_str(), "w", stdout);
   INFO("Starting program");
 
-  Vector3f camera_loc{0, 0, 0}, look_at{1, 1, 1};
+  Vector3f camera_loc{4, 0, 0}, look_at{0, 0, 0};
   Camera camera{camera_loc, look_at};
 
   World world;
-  world.addObject(std::make_unique<Sphere>(Vector3f{1, 1, 1}, 3));
-  world.addObject(std::make_unique<Model>("cow", ModelTraits::OBJ));
-  world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
+  world.addObject(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 1));
+  world.addObject(std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5));
+  world.addObject(std::make_unique<Sphere>(Vector3f{0, -1, 0}, 1));
+  // world.addObject(std::make_unique<Model>("cow", ModelTraits::OBJ));
+  // world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
-  RayTracer ray_tracer; // Default resolution and FOV
+  RayTracer ray_tracer{320, 200, 60};
 
   std::unique_ptr<Image> ray_trace_output = ray_tracer.trace(camera, world);
   ray_trace_output->write(ImageFormat::BMP, "test.bmp");

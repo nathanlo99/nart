@@ -9,9 +9,9 @@ class Camera final {
   Vector3f location, forward, right, up;
 
 public:
-  Camera(Vector3f location, Vector3f look_at,
-         Vector3f upward = (Vector3f){0, 0, 1})
-      : location{location}, forward{look_at.normalize()},
+  Camera(const Vector3f &location, const Vector3f &look_at,
+         const Vector3f &upward = (Vector3f){0, 0, 1})
+      : location{location}, forward{(look_at - location).normalize()},
         right{forward.cross(upward).normalize()},
         up{right.cross(forward).normalize()} {}
 

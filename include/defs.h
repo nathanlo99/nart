@@ -29,7 +29,8 @@ inline void error(const std::string &msg) {}
 #define INFO(s)
 #define ERROR(s)
 #endif // ifdef LOG
-       // ================================= Logging
-       // ==================================
 
+// ================================= Logging ==================================
+
+#define accuracy 0.000001
 #endif /* end of include guard: DEFS_H */

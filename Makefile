@@ -1,16 +1,11 @@
 
-CC := g++
+CC := clang++
 
-SRCDIR := src
-BUILDDIR := build
 TARGET := bin/raytracer
-LOGS := logs
-
-SRCEXT := cpp
-SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
-OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+SOURCES := $(shell find src -type f -name *.cpp)
+OBJECTS := $(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 DEPENDS := ${OBJECTS:.o=.d}
-CFLAGS := -std=c++14 -fopenmp  -MMD -Og -g -Wall -DLOG
+CFLAGS := -std=c++14 -fopenmp  -MMD -O0 -g -Wall -DLOG -fsanitize=undefined
 LIB := -pthread
 INC := -I include
 
@@ -18,17 +13,16 @@ $(TARGET): $(OBJECTS)
 	@echo "Linking..."
 	@echo "$(CC) $(CFLAGS) $^ -o $(TARGET) $(LIB)"; $(CC) $(CFLAGS) $^ -o $(TARGET) $(LIB)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
-	@mkdir -p $(BUILDDIR)
-	@echo "$(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
-
 -include ${DEPENDS}
+
+build/%.o: src/%.cpp
+	@mkdir -p build build/objects logs
+	@echo "$(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
 	@echo "Cleaning...";
 	find build ! -type d -delete
-	$(RM) $(TARGET)
-	$(RM) logs/*
+	$(RM) $(TARGET) logs/*
 
 tester: $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS:build/main.o=) test/tester.cpp $(INC) $(LIB) -o bin/tester
@@ -41,6 +35,6 @@ wc:
 	@find . -name '*.cpp' -o -name '*.h' | xargs wc
 
 todo:
-	@git grep -EI "TODO|FIXME|XXX" | egrep "^(src|test|include)" | cat
+	@git grep -EIn "TODO|FIXME|XXX" | egrep "^(src|test|include)" | cat
 
 .PHONY: clean wc todo
