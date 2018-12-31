@@ -10,7 +10,7 @@ class Camera final {
 
 public:
   Camera(const Vector3f &location, const Vector3f &look_at,
-         const Vector3f &upward = (Vector3f){0, 0, 1})
+         const Vector3f &upward = Vector3f{0, 0, 1})
       : location{location}, forward{(look_at - location).normalize()},
         right{forward.cross(upward).normalize()},
         up{right.cross(forward).normalize()} {}

@@ -6,15 +6,13 @@
 #include <cmath>
 #include <fstream>
 #include <string>
+#include <vector>
 
 void Image::write(ImageFormat format, const std::string &location) {
   if (format == ImageFormat::JPG) {
-    INFO("Saving image to " + location + " as JPG");
   } else if (format == ImageFormat::PNG) {
-    INFO("Saving image to " + location + " as PNG");
   } else if (format == ImageFormat::BMP) {
     std::ofstream out_file{"output/" + location, std::ofstream::binary};
-    INFO("Saving image to " + location + " as BMP");
     const size_t size_bytes = 4 * width * height;
     const size_t file_size = 14 + 40 + size_bytes;
 
@@ -45,17 +43,20 @@ void Image::write(ImageFormat format, const std::string &location) {
     out_file.write(reinterpret_cast<char *>(bmp_header), 14);
     out_file.write(reinterpret_cast<char *>(dib_header), 40);
 
+    std::vector<unsigned char> buf(3 * width * height);
+    const char *signed_buf = reinterpret_cast<const char *>(&buf[0]);
+    const Color *image_data = data.get();
+    size_t idx = 0;
     for (size_t i = 0; i < width * height; ++i) {
-      const unsigned char buf[3] = {(unsigned char)(floor(data[i].b * 255)),
-                                    (unsigned char)(floor(data[i].g * 255)),
-                                    (unsigned char)(floor(data[i].r * 255))};
-      out_file.write(reinterpret_cast<const char *>(buf), 3);
+      buf[idx++] = static_cast<unsigned char>(floor(image_data[i].b * 255));
+      buf[idx++] = static_cast<unsigned char>(floor(image_data[i].g * 255));
+      buf[idx++] = static_cast<unsigned char>(floor(image_data[i].r * 255));
     }
-    INFO("Done saving image");
+    out_file.write(signed_buf, static_cast<long>(3 * width * height));
   }
 }
 
 Color Image::at(float x, float y) const {
   // TODO
-  return (Color){0, 0, 0};
+  return Color{0, 0, 0};
 }

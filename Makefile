@@ -5,26 +5,30 @@ TARGET := bin/raytracer
 SOURCES := $(shell find src -type f -name *.cpp)
 OBJECTS := $(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 DEPENDS := ${OBJECTS:.o=.d}
-CFLAGS := -std=c++14 -fopenmp  -MMD -O0 -g -Wall -DLOG -fsanitize=undefined
-LIB := -pthread
+FASTFLAGS := -flto -fwhole-program-vtables -Ofast
+DEBUGFLAGS := -fsanitize=undefined,nullability -fno-omit-frame-pointer -Og -g -Wall -Wextra -pedantic -Wconversion -Wunreachable-code -Wuninitialized -Wold-style-cast -Wno-error=unused-parameter -Wno-error=unused-variable -Weffc++ -Wfloat-equal -Wmost
+
+CFLAGS := -std=c++14 -fopenmp -MMD -DLOG $(DEBUGFLAGS)
+
+LIB := -lbenchmark -pthread -lc++abi
 INC := -I include
 
 $(TARGET): $(OBJECTS)
 	@echo "Linking..."
-	@echo "$(CC) $(CFLAGS) $^ -o $(TARGET) $(LIB)"; $(CC) $(CFLAGS) $^ -o $(TARGET) $(LIB)
+	$(CC) $(CFLAGS) $^ -o $(TARGET) $(LIB)
 
 -include ${DEPENDS}
 
 build/%.o: src/%.cpp
 	@mkdir -p build build/objects logs
-	@echo "$(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
 	@echo "Cleaning...";
 	find build ! -type d -delete
 	$(RM) $(TARGET) logs/*
 
-tester: $(OBJECTS)
+tester: $(OBJECTS:build/main.o=)
 	$(CC) $(CFLAGS) $(OBJECTS:build/main.o=) test/tester.cpp $(INC) $(LIB) -o bin/tester
 
 check:
@@ -37,4 +41,13 @@ wc:
 todo:
 	@git grep -EIn "TODO|FIXME|XXX" | egrep "^(src|test|include)" | cat
 
-.PHONY: clean wc todo
+benchmark: $(OBJECTS:build/main.o=)
+	@clang++ $(CFLAGS) -c test/benchmark.cpp -Iinclude -o build/benchmark.o
+	@clang++ $(CFLAGS) $(OBJECTS:build/main.o=build/benchmark.o) -o bin/benchmark $(LIB)
+	bin/benchmark
+
+profile: $(TARGET)
+	@sudo perf record -g $(TARGET)
+	@sudo perf report -g 'graph,0.5,caller'
+
+.PHONY: clean wc todo benchmark

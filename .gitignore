@@ -4,3 +4,4 @@ logs/*
 bin/*
 *.DS_Store
 output/*
+perf*

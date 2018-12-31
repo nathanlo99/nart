@@ -15,7 +15,6 @@ std::pair<double, Color> Sphere::intersect(const Ray &ray) const {
   if (b * b < c)
     return {-1, Color{0, 1, 0}};
   double t1 = -sqrt(b * b - c) - b;
-  Color color{1, 1, 0};
   return (t1 > 0) ? std::make_pair(t1, color)
-                  : std::make_pair(sqrt(b * b - c) - b, color);
+                  : std::make_pair(-t1 - 2 * b, color);
 }
