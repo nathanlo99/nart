@@ -11,6 +11,8 @@
 
 class World {
   std::vector<std::unique_ptr<Object>> objects;
+  double max_dist = 10000.0;
+  Color background = Color::BLACK;
 
 public:
   World() {}

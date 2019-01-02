@@ -1,10 +1,14 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+#include <limits>
+#include <type_traits>
 
 // ================================= Logging ==================================
 #ifdef LOG
@@ -32,5 +36,20 @@ inline void error(const std::string &msg) {}
 
 // ================================= Logging ==================================
 
-#define accuracy 0.000001
+template <class T>
+constexpr
+    typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+    fequal(T x, T y, int ulp = 2) {
+  return std::abs(x - y) <=
+             std::numeric_limits<T>::epsilon() * std::abs(x + y) * ulp ||
+         std::abs(x - y) < std::numeric_limits<T>::min();
+}
+
+template <class T>
+constexpr
+    typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+    fzero(T x, int ulp = 2) {
+  return std::abs(x) <= std::numeric_limits<T>::epsilon() * ulp;
+}
+
 #endif /* end of include guard: DEFS_H */

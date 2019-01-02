@@ -30,7 +30,7 @@ template <typename T> constexpr Vector<T> operator*(double c, Vector<T> a) {
 }
 
 template <typename T> constexpr bool operator==(Vector<T> a, Vector<T> b) {
-  return a.x == b.x && a.y == b.y && a.z == b.z;
+  return fequal(a.x, b.x, 2) && fequal(a.y, b.y, 2) && fequal(a.z, b.z, 2);
 }
 template <typename T> constexpr bool operator!=(Vector<T> a, Vector<T> b) {
   return !(a == b);
