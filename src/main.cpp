@@ -44,6 +44,7 @@ int main() {
     std::stringstream ss;
     ss << "animate/frame_" << std::setw(3) << std::setfill('0') << i << ".bmp";
     ray_trace_output->write(ImageFormat::BMP, ss.str());
+    std::cout << "Wrote " << ss.str() << std::endl;
   }
 
   INFO("Terminating program");

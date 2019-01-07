@@ -9,6 +9,7 @@
 #include <iostream>
 #include <limits>
 #include <type_traits>
+#include <random>
 
 // ================================= Logging ==================================
 #ifdef LOG
@@ -50,6 +51,16 @@ constexpr
     typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
     fzero(T x, int ulp = 2) {
   return std::abs(x) <= std::numeric_limits<T>::epsilon() * ulp;
+}
+
+// ============================================================================
+
+template<typename T>
+double random() {
+  static auto seed = std::chrono::system_clock().now().time_since_epoch().count();
+  static std::default_random_engine generator(seed);
+  static std::uniform_real_distribution<T> distribution(0.0, 1.0);
+  return distribution(generator);
 }
 
 #endif /* end of include guard: DEFS_H */
