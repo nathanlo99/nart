@@ -8,7 +8,7 @@ DEPENDS := ${OBJECTS:.o=.d}
 FASTFLAGS := -flto -fwhole-program-vtables -Ofast
 DEBUGFLAGS := -fsanitize=undefined,nullability -fno-omit-frame-pointer -O2 -g -Wall -Wextra -pedantic -Wconversion -Wunreachable-code -Wuninitialized -Wold-style-cast -Wno-error=unused-parameter -Wno-error=unused-variable -Weffc++ -Wfloat-equal -Wmost
 
-CFLAGS := -std=c++14 -fopenmp -MMD -DLOG $(FASTFLAGS)
+CFLAGS := -std=c++14 -fopenmp -MMD -DLOG $(DEBUGFLAGS)
 
 LIB := -lbenchmark -pthread -lc++abi
 INC := -I include
@@ -48,6 +48,6 @@ benchmark: $(OBJECTS:build/main.o=)
 
 profile: $(TARGET)
 	@sudo perf record -g $(TARGET)
-	@sudo perf report -g 'graph,0.5,caller'
+	@sudo perf report -g 'graph,0.1,caller'
 
 .PHONY: clean wc todo benchmark

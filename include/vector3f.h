@@ -5,8 +5,9 @@
 #include <iostream>
 
 template <typename T> struct Vector {
-  T x, y, z;
+  T x = 0, y = 0, z = 0;
   using type = T;
+  Vector(T x, T y, T z) : x{x}, y{y}, z{z} {}
   constexpr T dot(const Vector<T> &other) const;
   constexpr T norm() const;
   constexpr Vector<T> normalize() const;

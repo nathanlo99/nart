@@ -31,8 +31,9 @@ int main() {
       std::make_unique<Sphere>(Vector3f{0, -1, 0}, 0.25, Color::GREEN));
   world.addObject(std::make_unique<Plane>(Vector3f{0, 0, 0}, Vector3f{0, 0, 1},
                                           Color::TURQUOISE));
-  // world.addObject(std::make_unique<Model>("cow", ModelTraits::OBJ));
-  // world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
+
+  world.addObject(std::make_unique<Model>("cow", ModelTraits::OBJ));
+  world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
   RayTracer ray_tracer{320, 200, 60};
 

@@ -8,8 +8,10 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
-#include <type_traits>
 #include <random>
+#include <tuple>
+#include <type_traits>
+#include <vector>
 
 // ================================= Logging ==================================
 #ifdef LOG
@@ -55,12 +57,30 @@ constexpr
 
 // ============================================================================
 
-template<typename T>
-double random() {
-  static auto seed = std::chrono::system_clock().now().time_since_epoch().count();
+template <typename T> T random() {
+  static auto seed =
+      std::chrono::system_clock().now().time_since_epoch().count();
   static std::default_random_engine generator(seed);
   static std::uniform_real_distribution<T> distribution(0.0, 1.0);
   return distribution(generator);
+}
+
+// ============================================================================
+
+template <typename S, typename T, typename U>
+std::ostream &operator<<(std::ostream &os, const std::tuple<S, T, U> &x) {
+  return os << "(" << std::get<0>(x) << ", " << std::get<1>(x) << ", "
+            << std::get<2>(x) << ")";
+}
+
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
+  if (v.empty())
+    return os << "[]";
+  os << "[" << v[0];
+  for (unsigned i = 1; i < v.size(); ++i)
+    os << v[i];
+  return os << "]";
 }
 
 #endif /* end of include guard: DEFS_H */

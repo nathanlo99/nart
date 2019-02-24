@@ -17,7 +17,7 @@ std::unique_ptr<Image> RayTracer::trace(const Camera &camera,
     for (size_t x = 0; x < screen_width; x++) {
       Color result_color{0, 0, 0};
       for (size_t i = 0; i < aa_num; i++) {
-        const double rx = random<double>(), ry = random<double>();
+        const float rx = random<float>(), ry = random<float>();
         const Vector3f dir = forward                               //
                              + (x - (screen_width / 2.) + rx) * dx //
                              + (y - (screen_height / 2.) + ry) * dy;
