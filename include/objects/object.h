@@ -18,7 +18,8 @@ public:
   Object() {}
   virtual ~Object() {}
 
-  virtual std::pair<double, Color> intersect(const Ray &ray) const = 0;
+  virtual std::tuple<double, Color, Vector3f>
+  intersect(const Ray &ray) const = 0;
 
   World *getWorld() { return world; }
   void setWorld(World *world) { this->world = world; }

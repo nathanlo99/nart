@@ -2,10 +2,9 @@
 #include "objects/plane.h"
 
 #include "defs.h"
-std::pair<double, Color> Plane::intersect(const Ray &ray) const {
+std::tuple<double, Color, Vector3f> Plane::intersect(const Ray &ray) const {
   const double vn = ray.direction.dot(normal);
   if (fzero(vn))
-    return {-1, Color::BLACK};
-  // std::cout << vn << std::endl;
-  return {(point - ray.start).dot(normal) / vn, color};
+    return {-1, Color::BLACK, {0, 0, 0}};
+  return {(point - ray.start).dot(normal) / vn, color, normal};
 }

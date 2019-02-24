@@ -58,7 +58,7 @@ constexpr
 // ============================================================================
 
 template <typename T> T random() {
-  static auto seed =
+  static const auto seed =
       std::chrono::system_clock().now().time_since_epoch().count();
   static std::default_random_engine generator(seed);
   static std::uniform_real_distribution<T> distribution(0.0, 1.0);

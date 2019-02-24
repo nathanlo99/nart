@@ -12,7 +12,7 @@ public:
       : point{point}, normal{normal.normalize()}, color{color} {}
   ~Plane() {}
 
-  std::pair<double, Color> intersect(const Ray &ray) const override;
+  std::tuple<double, Color, Vector3f> intersect(const Ray &ray) const override;
 };
 
 #endif /* end of include guard: PLANE_H */

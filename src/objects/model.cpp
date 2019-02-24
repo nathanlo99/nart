@@ -106,10 +106,10 @@ Model::Model(const std::string &name, ModelTraits option) {
   }
   INFO("Loaded " + name + ": " + std::to_string(data.size() - 1) + " faces, " +
        std::to_string(vertices.size() - 1) + " vertices, " +
-       std::to_string(texture_coords.size()) + " texture coords, " +
+       std::to_string(texture_coords.size() - 1) + " texture coords, " +
        std::to_string(normals.size() - 1) + " normals");
 }
 
-std::pair<double, Color> Model::intersect(const Ray &ray) const {
-  return {-1, {0, 0, 0}};
+std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray) const {
+  return {-1, {0, 0, 0}, {0, 0, 0}};
 }

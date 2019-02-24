@@ -17,7 +17,7 @@ class RayTracer {
   // Horizontal field of view, in degrees
   double horizontal_fov = 60;
   size_t max_depth = 5;
-  size_t aa_num = 16;
+  size_t aa_num = 3;
 
 public:
   RayTracer() {} // take defaults

@@ -3,6 +3,7 @@
 
 #include "camera.h"
 #include "image.h"
+#include "lights/point_light.h"
 #include "objects/model.h"
 #include "objects/plane.h"
 #include "objects/sphere.h"
@@ -35,7 +36,10 @@ int main() {
   world.addObject(std::make_unique<Model>("cow", ModelTraits::OBJ));
   world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
-  RayTracer ray_tracer{320, 200, 60};
+  world.addLight(
+      std::make_unique<PointLight>(Vector3f{2, 2, 2}, 0.7 * Color::WHITE));
+
+  RayTracer ray_tracer{640, 400, 60};
 
   for (int i = 0; i < 360; ++i) {
     Vector3f camera_loc{4 * cos(M_PI * i / 180.), 4 * sin(M_PI * i / 180.), 1},

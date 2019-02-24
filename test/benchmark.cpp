@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "defs.h"
 #include "image.h"
+#include "lights/point_light.h"
 #include "objects/model.h"
 #include "objects/sphere.h"
 #include "raytracer.h"
@@ -21,12 +22,15 @@ static void bench_trace(benchmark::State &state) {
   world.addObject(
       std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5, Color::GREEN));
   world.addObject(std::make_unique<Sphere>(Vector3f{0, -1, 0}, 1, Color::BLUE));
+  world.addLight(std::make_unique<PointLight>(Vector3f{2, 2, 2}, Color::WHITE));
+
   RayTracer ray_tracer{640, 400, 60};
 
   std::unique_ptr<Image> ray_trace_output;
   for (auto _ : state) {
     ray_trace_output = ray_tracer.trace(camera, world);
   }
+  ray_trace_output->write(ImageFormat::BMP, "benchmark.bmp");
 }
 
 static void bench_image_write(benchmark::State &state) {

@@ -16,7 +16,7 @@ public:
       : center{center}, radius{radius}, color{color} {}
   ~Sphere() {}
 
-  std::pair<double, Color> intersect(const Ray &ray) const override;
+  std::tuple<double, Color, Vector3f> intersect(const Ray &ray) const override;
 };
 
 #endif

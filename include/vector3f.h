@@ -1,6 +1,7 @@
 #ifndef VECTOR3F_H
 #define VECTOR3F_H
 
+#include "defs.h"
 #include <cmath>
 #include <iostream>
 
@@ -8,6 +9,13 @@ template <typename T> struct Vector {
   T x = 0, y = 0, z = 0;
   using type = T;
   Vector(T x, T y, T z) : x{x}, y{y}, z{z} {}
+  Vector(const Vector &other) : x{other.x}, y{other.y}, z{other.z} {}
+  Vector &operator=(const Vector &other) {
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    return *this;
+  }
   constexpr T dot(const Vector<T> &other) const;
   constexpr T norm() const;
   constexpr Vector<T> normalize() const;
@@ -43,6 +51,7 @@ template <typename T> constexpr T Vector<T>::dot(const Vector<T> &other) const {
 template <typename T> constexpr T Vector<T>::norm() const {
   return sqrt(dot(*this));
 }
+
 template <typename T> constexpr Vector<T> Vector<T>::normalize() const {
   const T nm = norm();
   return {x / nm, y / nm, z / nm};
@@ -63,5 +72,7 @@ std::ostream &operator<<(std::ostream &os, const Vector<T> &vec) {
   return os << vec.to_string();
 }
 
-#define Vector3f Vector<double>
+using Vector3f = Vector<double>;
+#define accuracy 0.00001
+
 #endif /* end of include guard: VECTOR3F_H */
