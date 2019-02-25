@@ -8,6 +8,7 @@
 template <typename T> struct Vector {
   T x = 0, y = 0, z = 0;
   using type = T;
+  Vector() {}
   Vector(T x, T y, T z) : x{x}, y{y}, z{z} {}
   Vector(const Vector &other) : x{other.x}, y{other.y}, z{other.z} {}
   Vector &operator=(const Vector &other) {
@@ -54,6 +55,8 @@ template <typename T> constexpr T Vector<T>::norm() const {
 
 template <typename T> constexpr Vector<T> Vector<T>::normalize() const {
   const T nm = norm();
+  // if (fzero(nm))
+  //   return *this;
   return {x / nm, y / nm, z / nm};
 }
 

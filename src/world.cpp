@@ -29,7 +29,7 @@ Color World::intersect(const Ray &ray, size_t depth) const {
     return background; // Skip diffuse, specular
 
   const Vector3f intersection_point = ray.start + dist * ray.direction;
-  const double ambient = 0.1, diffuse = 0.7, specular = 0.3, alpha = 10;
+  const double ambient = 0.1, diffuse = 0.7, specular = 0.3, alpha = 100;
 
   Color diffuse_color{0, 0, 0}, specular_color{0, 0, 0};
 

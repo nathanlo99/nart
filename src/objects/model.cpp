@@ -49,7 +49,7 @@ Model::Model(const std::string &name, ModelTraits option) {
       continue;
     } else if (line_kind == "v") { // Vertex
       double x = 0, y = 0, z = 0;
-      cur_line_stream >> x >> y >> z;
+      cur_line_stream >> x >> z >> y;
       vertices.emplace_back(x, y, z);
     } else if (line_kind == "vt") { // Texture coordinates
       float u = 0, v = 0;
@@ -95,6 +95,8 @@ Model::Model(const std::string &name, ModelTraits option) {
                         texture_c, normal_a, normal_b, normal_c);
     } else if (line_kind == "usemtl") {
 
+    } else if (line_kind == "mtllib") {
+
     } else if (line_kind == "s") {
 
     } else if (line_kind == "g") {
@@ -104,12 +106,48 @@ Model::Model(const std::string &name, ModelTraits option) {
            cur_line + "'");
     }
   }
-  INFO("Loaded " + name + ": " + std::to_string(data.size() - 1) + " faces, " +
+  INFO("Loaded " + name + ": " + std::to_string(data.size()) + " faces, " +
        std::to_string(vertices.size() - 1) + " vertices, " +
        std::to_string(texture_coords.size() - 1) + " texture coords, " +
        std::to_string(normals.size() - 1) + " normals");
 }
 
+std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray) const {
+  const double vn = ray.direction.dot(plane_normal);
+  if (fzero(vn))
+    return {-1, {0, 0, 0}, {0, 0, 0}};
+  const double dist = (vertex_a - ray.start).dot(plane_normal) / vn;
+  const Vector3f point = ray.start + dist * ray.direction;
+  const double cross1 =
+      (vertex_c - vertex_a).cross(point - vertex_a).dot(plane_normal);
+  const double cross2 =
+      (vertex_a - vertex_b).cross(point - vertex_b).dot(plane_normal);
+  const double cross3 =
+      (vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal);
+  if (cross1 <= 0 && cross2 <= 0 && cross3 <= 0) {
+    return {dist, Color::WHITE, plane_normal};
+  } else {
+    return {-1, {0, 0, 0}, {0, 0, 0}};
+  }
+}
+
 std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray) const {
-  return {-1, {0, 0, 0}, {0, 0, 0}};
+  double min_dist = 10000.0, cur_dist;
+  bool intersected = false;
+  Color min_color = Color::BLACK, cur_color;
+  Vector3f min_normal{0, 0, 0}, cur_normal{0, 0, 0};
+
+  for (const auto &face : data) {
+    const auto &intersect_result = face.intersect(ray);
+    std::tie(cur_dist, cur_color, cur_normal) = intersect_result;
+    if (cur_dist > accuracy && cur_dist < min_dist) {
+      std::tie(min_dist, min_color, min_normal) = intersect_result;
+      intersected = true;
+    }
+  }
+
+  if (intersected)
+    return {min_dist, min_color, min_normal};
+  else
+    return {-1, {0, 0, 0}, {0, 0, 0}};
 }
