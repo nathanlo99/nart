@@ -29,7 +29,7 @@ struct Face : public Object {
 
   Face(const Vector3f &a, const Vector3f &b, const Vector3f &c)
       : vertex_a{a}, vertex_b{b}, vertex_c{c},
-        plane_normal{(c - b).cross(a - b).normalize()}, normal_a{plane_normal},
+        plane_normal{(b - a).cross(c - a).normalize()}, normal_a{plane_normal},
         normal_b{plane_normal}, normal_c{plane_normal}, material{} {}
 
   Face(const Vector3f &a, const Vector3f &b, const Vector3f &c,
@@ -37,14 +37,16 @@ struct Face : public Object {
        const Vector3f &normal_a, const Vector3f &normal_b,
        const Vector3f &normal_c)
       : vertex_a{a}, vertex_b{b}, vertex_c{c},
-        plane_normal{(c - b).cross(a - b).normalize()}, normal_a{normal_a},
+        plane_normal{(b - a).cross(c - a).normalize()}, normal_a{normal_a},
         normal_b{normal_b}, normal_c{normal_c}, texture_a{texture_a},
         texture_b{texture_b}, texture_c{texture_c} {
-    if (fzero(normal_a.norm()))
+    if (fzero(normal_a.norm())) {
       this->normal_a = this->normal_b = this->normal_c = plane_normal;
+    }
   }
-
-  std::tuple<double, Color, Vector3f> intersect(const Ray &ray) const override;
+  bool intersects(const Ray &ray, double max_dist) const override;
+  std::tuple<double, Color, Vector3f> intersect(const Ray &ray,
+                                                double max_dist) const override;
 };
 
 class Model : public Object {
@@ -54,7 +56,9 @@ public:
   explicit Model(const std::string &name, ModelTraits option = MODEL);
   ~Model() {}
 
-  std::tuple<double, Color, Vector3f> intersect(const Ray &ray) const override;
+  bool intersects(const Ray &ray, double max_dist) const override;
+  std::tuple<double, Color, Vector3f> intersect(const Ray &ray,
+                                                double max_dist) const override;
 };
 
 #endif

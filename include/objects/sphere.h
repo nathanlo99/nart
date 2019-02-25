@@ -16,7 +16,9 @@ public:
       : center{center}, radius{radius}, color{color} {}
   ~Sphere() {}
 
-  std::tuple<double, Color, Vector3f> intersect(const Ray &ray) const override;
+  bool intersects(const Ray &ray, double max_dist) const override;
+  std::tuple<double, Color, Vector3f> intersect(const Ray &ray,
+                                                double max_dist) const override;
 };
 
 #endif

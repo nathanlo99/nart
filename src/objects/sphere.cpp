@@ -9,7 +9,8 @@
 #include <utility>
 #include <vector>
 
-std::tuple<double, Color, Vector3f> Sphere::intersect(const Ray &ray) const {
+std::tuple<double, Color, Vector3f> Sphere::intersect(const Ray &ray,
+                                                      double max_dist) const {
   const Vector3f d = ray.start - center;
   const double b = d.dot(ray.direction);
   const double c = d.dot(d) - radius * radius;
@@ -18,13 +19,16 @@ std::tuple<double, Color, Vector3f> Sphere::intersect(const Ray &ray) const {
     return {-1, {0, 0, 0}, {0, 0, 0}};
   const double tt = sqrt(t), t1 = -tt - b;
   if (-tt > b) {
-    // return std::make_tuple(t1, color, Vector3f{0, 0, 1});
-    return std::make_tuple(
-        t1, color, (ray.start + (t1 * ray.direction) - center).normalize());
+    return std::make_tuple(t1, color, (d + t1 * ray.direction).normalize());
   } else {
-    // return std::make_tuple(tt - b, color, Vector3f{0, 0, 1});
-    return std::make_tuple(
-        tt - b, color,
-        (ray.start + ((tt - b) * ray.direction) - center).normalize());
+    return std::make_tuple(tt - b, color,
+                           (d + (tt - b) * ray.direction).normalize());
   }
+}
+
+bool Sphere::intersects(const Ray &ray, double max_dist) const {
+  const Vector3f d = ray.start - center;
+  const double b = d.dot(ray.direction);
+  const double c = d.dot(d) - radius * radius;
+  return b * b - c > accuracy && b * b - c < max_dist;
 }

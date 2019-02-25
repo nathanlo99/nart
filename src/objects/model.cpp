@@ -76,6 +76,7 @@ Model::Model(const std::string &name, ModelTraits option) {
 
         indices.emplace_back(cur_indices[0], cur_indices[1], cur_indices[2]);
       }
+      // std::cout << cur_line << std::endl;
       // std::cout << indices << std::endl;
       if (indices.size() != 3)
         ERROR("Faces with != 3 vertices not yet supported");
@@ -112,33 +113,70 @@ Model::Model(const std::string &name, ModelTraits option) {
        std::to_string(normals.size() - 1) + " normals");
 }
 
-std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray) const {
+bool Face::intersects(const Ray &ray, double max_dist) const {
+  const double vn = ray.direction.dot(plane_normal);
+  if (fzero(vn))
+    return false;
+  const double dist = (vertex_a - ray.start).dot(plane_normal) / vn;
+  if (dist > max_dist || dist < accuracy)
+    return false;
+  const Vector3f point = ray.start + dist * ray.direction;
+  const double cross1 =
+      (vertex_c - vertex_a).cross(point - vertex_a).dot(plane_normal);
+  if (cross1 > 0)
+    return false;
+  const double cross2 =
+      (vertex_a - vertex_b).cross(point - vertex_b).dot(plane_normal);
+  if (cross2 > 0)
+    return false;
+  const double cross3 =
+      (vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal);
+  if (cross3 > 0)
+    return false;
+  return true;
+}
+
+std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray,
+                                                    double max_dist) const {
   const double vn = ray.direction.dot(plane_normal);
   if (fzero(vn))
     return {-1, {0, 0, 0}, {0, 0, 0}};
   const double dist = (vertex_a - ray.start).dot(plane_normal) / vn;
+  if (dist > max_dist || dist < 0)
+    return {-1, {0, 0, 0}, {0, 0, 0}};
   const Vector3f point = ray.start + dist * ray.direction;
   const double cross1 =
       (vertex_c - vertex_a).cross(point - vertex_a).dot(plane_normal);
+  if (cross1 > 0)
+    return {-1, {0, 0, 0}, {0, 0, 0}};
   const double cross2 =
       (vertex_a - vertex_b).cross(point - vertex_b).dot(plane_normal);
+  if (cross2 > 0)
+    return {-1, {0, 0, 0}, {0, 0, 0}};
   const double cross3 =
       (vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal);
-  if (cross1 <= 0 && cross2 <= 0 && cross3 <= 0) {
-    return {dist, Color::WHITE, plane_normal};
-  } else {
+  if (cross3 > 0)
     return {-1, {0, 0, 0}, {0, 0, 0}};
-  }
+  return {dist, Color::WHITE, plane_normal};
 }
 
-std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray) const {
+bool Model::intersects(const Ray &ray, double max_dist) const {
+  for (const auto &face : data) {
+    if (face.intersects(ray, max_dist))
+      return true;
+  }
+  return false;
+}
+
+std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray,
+                                                     double max_dist) const {
   double min_dist = 10000.0, cur_dist;
   bool intersected = false;
   Color min_color = Color::BLACK, cur_color;
   Vector3f min_normal{0, 0, 0}, cur_normal{0, 0, 0};
 
   for (const auto &face : data) {
-    const auto &intersect_result = face.intersect(ray);
+    const auto &intersect_result = face.intersect(ray, min_dist);
     std::tie(cur_dist, cur_color, cur_normal) = intersect_result;
     if (cur_dist > accuracy && cur_dist < min_dist) {
       std::tie(min_dist, min_color, min_normal) = intersect_result;

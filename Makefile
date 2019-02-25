@@ -8,7 +8,7 @@ DEPENDS := ${OBJECTS:.o=.d}
 FASTFLAGS := -flto -fwhole-program-vtables -Ofast
 DEBUGFLAGS := -fsanitize=undefined,nullability -fno-omit-frame-pointer -O2 -g -Wall -Wextra -pedantic -Wconversion -Wunreachable-code -Wuninitialized -Wold-style-cast -Wno-error=unused-parameter -Wno-error=unused-variable -Weffc++ -Wfloat-equal -Wmost
 
-CFLAGS := -std=c++17 -fopenmp -MMD -DLOG $(DEBUGFLAGS)
+CFLAGS := -std=c++17 -fopenmp -MMD -DLOG $(FASTFLAGS)
 
 LIB := -lbenchmark -pthread -lc++abi
 INC := -I include

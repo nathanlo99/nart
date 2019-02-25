@@ -17,11 +17,10 @@ Color World::intersect(const Ray &ray, size_t depth) const {
     double tmp_dist;
     Color tmp_col;
     Vector3f tmp_normal{0, 0, 0};
-    std::tie(tmp_dist, tmp_col, tmp_normal) = x->intersect(ray);
+    const auto &intersection_result = x->intersect(ray, dist);
+    std::tie(tmp_dist, tmp_col, tmp_normal) = intersection_result;
     if (tmp_dist > accuracy && tmp_dist < dist) {
-      dist = tmp_dist;
-      ambient_color = tmp_col;
-      normal = tmp_normal;
+      std::tie(dist, ambient_color, normal) = intersection_result;
       intersected = true;
     }
   }
@@ -43,19 +42,24 @@ Color World::intersect(const Ray &ray, size_t depth) const {
     if (Lm.dot(N) <= 0)
       continue;
     bool obstacles = false;
-    for (const auto &x : objects) {
-      const auto &tmp_dist = std::get<0>(x->intersect(shadow_ray));
-      if (tmp_dist > accuracy && tmp_dist < light_dist) {
-        obstacles = true;
-        break;
-      }
-    }
+    // int index = 0;
+    // for (const auto &x : objects) {
+    //   if (x->intersects(shadow_ray, light_dist)) {
+    //     obstacles = true;
+    //     break;
+    //   }
+    //   ++index;
+    // }
+    // obstacles = false;
     if (!obstacles) {
       const Color light_color = light->getColor(intersection_point);
+      // INFO("Lm.N");
       if (Lm.dot(N) > 0)
-        diffuse_color = diffuse_color + Lm.dot(N) * ambient_color;
+        diffuse_color = diffuse_color + Lm.dot(N) * light_color;
       if (Rm.dot(V) > 0)
         specular_color = specular_color + pow(Rm.dot(V), alpha) * light_color;
+    } else {
+      // INFO("S");
     }
   }
 

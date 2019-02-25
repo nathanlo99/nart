@@ -21,7 +21,7 @@ inline void log(const std::string &type, const std::string &msg) {
       static_cast<std::chrono::nanoseconds>(
           std::chrono::high_resolution_clock::now() - program_start_time)
           .count();
-  std::cout << std::setw(10) << std::left << nano << " : " << type << " " << msg
+  std::cout << std::setw(15) << std::left << nano << " : " << type << " " << msg
             << std::endl;
 }
 #define INFO(s)                                                                \
@@ -79,7 +79,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
     return os << "[]";
   os << "[" << v[0];
   for (unsigned i = 1; i < v.size(); ++i)
-    os << v[i];
+    os << ", " << v[i];
   return os << "]";
 }
 

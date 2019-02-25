@@ -13,7 +13,7 @@ void Image::write(ImageFormat format, const std::string &location) {
   } else if (format == ImageFormat::PNG) {
   } else if (format == ImageFormat::BMP) {
     std::ofstream out_file{"output/" + location, std::ofstream::binary};
-    const size_t size_bytes = 4 * width * height;
+    const size_t size_bytes = 3 * width * height;
     const size_t file_size = 14 + 40 + size_bytes;
 
     const int ppm = 2808;
@@ -52,7 +52,7 @@ void Image::write(ImageFormat format, const std::string &location) {
       buf[idx++] = static_cast<unsigned char>(floor(image_data[i].g * 255));
       buf[idx++] = static_cast<unsigned char>(floor(image_data[i].r * 255));
     }
-    out_file.write(signed_buf, static_cast<long>(3 * width * height));
+    out_file.write(signed_buf, 3L * width * height);
   }
 }
 
