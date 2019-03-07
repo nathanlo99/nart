@@ -13,7 +13,7 @@
 #include <utility>
 #include <vector>
 
-Model::Model(const std::string &name, ModelTraits option) {
+Model::Model(const std::string &name, ModelTraits option, bool flip_normals) {
   INFO("Loading model " + name);
   const std::string obj_file_name =
       (option == ModelTraits::MODEL)
@@ -93,7 +93,7 @@ Model::Model(const std::string &name, ModelTraits option) {
       const Vector3f normal_a = normals[vn1], normal_b = normals[vn2],
                      normal_c = normals[vn3];
       data.emplace_back(vertex_a, vertex_b, vertex_c, texture_a, texture_b,
-                        texture_c, normal_a, normal_b, normal_c);
+                        texture_c, normal_a, normal_b, normal_c, flip_normals);
     } else if (line_kind == "usemtl") {
 
     } else if (line_kind == "mtllib") {
@@ -113,12 +113,12 @@ Model::Model(const std::string &name, ModelTraits option) {
        std::to_string(normals.size() - 1) + " normals");
 }
 
-bool Face::intersects(const Ray &ray, double max_dist) const {
+bool Face::intersects(const Ray &ray, double min_dist, double max_dist) const {
   const double vn = ray.direction.dot(plane_normal);
   if (fzero(vn))
     return false;
   const double dist = (vertex_a - ray.start).dot(plane_normal) / vn;
-  if (dist > max_dist || dist < accuracy)
+  if (dist < min_dist || dist > max_dist)
     return false;
   const Vector3f point = ray.start + dist * ray.direction;
   const double cross1 =
@@ -142,7 +142,7 @@ std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray,
   if (fzero(vn))
     return {-1, {0, 0, 0}, {0, 0, 0}};
   const double dist = (vertex_a - ray.start).dot(plane_normal) / vn;
-  if (dist > max_dist || dist < 0)
+  if (dist > max_dist || dist < accuracy)
     return {-1, {0, 0, 0}, {0, 0, 0}};
   const Vector3f point = ray.start + dist * ray.direction;
   const double cross1 =
@@ -157,12 +157,12 @@ std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray,
       (vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal);
   if (cross3 > 0)
     return {-1, {0, 0, 0}, {0, 0, 0}};
-  return {dist, Color::WHITE, plane_normal};
+  return {dist, Color::WHITE, flip_normals ? -1 * plane_normal : plane_normal};
 }
 
-bool Model::intersects(const Ray &ray, double max_dist) const {
+bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {
   for (const auto &face : data) {
-    if (face.intersects(ray, max_dist))
+    if (face.intersects(ray, min_dist, max_dist))
       return true;
   }
   return false;
@@ -170,22 +170,22 @@ bool Model::intersects(const Ray &ray, double max_dist) const {
 
 std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray,
                                                      double max_dist) const {
-  double min_dist = 10000.0, cur_dist;
+  double closest_dist = 10000.0, cur_dist;
   bool intersected = false;
-  Color min_color = Color::BLACK, cur_color;
-  Vector3f min_normal{0, 0, 0}, cur_normal{0, 0, 0};
+  Color closest_color = Color::BLACK, cur_color;
+  Vector3f closest_normal{0, 0, 0}, cur_normal{0, 0, 0};
 
   for (const auto &face : data) {
-    const auto &intersect_result = face.intersect(ray, min_dist);
+    const auto &intersect_result = face.intersect(ray, closest_dist);
     std::tie(cur_dist, cur_color, cur_normal) = intersect_result;
-    if (cur_dist > accuracy && cur_dist < min_dist) {
-      std::tie(min_dist, min_color, min_normal) = intersect_result;
+    if (cur_dist > accuracy && cur_dist < max_dist) {
+      std::tie(closest_dist, closest_color, closest_normal) = intersect_result;
       intersected = true;
     }
   }
 
   if (intersected)
-    return {min_dist, min_color, min_normal};
+    return {closest_dist, closest_color, closest_normal};
   else
     return {-1, {0, 0, 0}, {0, 0, 0}};
 }
