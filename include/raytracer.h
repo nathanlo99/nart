@@ -20,13 +20,15 @@ class RayTracer {
   size_t aa_num = 1;
 
 public:
-  RayTracer() {} // take defaults
-  RayTracer(size_t screen_width, size_t screen_height, float horizontal_fov)
+  RayTracer() noexcept {} // take defaults
+  RayTracer(size_t screen_width, size_t screen_height,
+            float horizontal_fov) noexcept
       : screen_width{screen_width}, screen_height{screen_height},
         horizontal_fov{horizontal_fov} {}
-  ~RayTracer() {}
+  ~RayTracer() noexcept {}
 
-  std::unique_ptr<Image> trace(const Camera &camera, const World &world);
+  std::unique_ptr<Image> trace(const Camera &camera, const World &world,
+                               const std::string &render_name);
 };
 
 #endif

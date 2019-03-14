@@ -30,14 +30,15 @@ int main() {
   //     std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5, Color::YELLOW));
   // world.addObject(
   //     std::make_unique<Sphere>(Vector3f{0, -1, 0}, 0.25, Color::GREEN));
-  world.addObject(std::make_unique<Plane>(Vector3f{0, 0, -4}, Vector3f{0, 0, 1},
-                                          0.3 * Color::WHITE));
+  world.addObject(std::make_unique<Plane>(
+      Vector3f{0, 0, -50}, Vector3f{0, 0, 1}, 0.3 * Color::BLACK));
 
-  // world.addObject(std::make_unique<Model>("monkey", ModelTraits::OBJ, true));
-  world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL, true));
+  world.addObject(std::make_unique<Model>("teapot", ModelTraits::OBJ));
+  // world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
-  RayTracer ray_tracer{480, 300, 60};
-  const double distance = 300, height_offset = 80;
+  // RayTracer ray_tracer{1680, 1050, 60};
+  RayTracer ray_tracer{800, 500, 60};
+  const double distance = 400, height_offset = 0;
   world.addLight(std::make_unique<PointLight>(Vector3f{distance, 0, distance},
                                               0.3 * Color::WHITE));
   world.addLight(std::make_unique<PointLight>(Vector3f{0, distance, distance},
@@ -48,16 +49,25 @@ int main() {
                                               0.3 * Color::GREEN));
 
   for (int i = 0; i < 360; ++i) {
-    Vector3f camera_loc{distance * sin(M_PI * i / 180.),
-                        distance * cos(M_PI * i / 180.),
-                        distance / 3. + height_offset},
-        look_at{0, 0, height_offset};
-    Camera camera{camera_loc, look_at};
-    std::unique_ptr<Image> ray_trace_output = ray_tracer.trace(camera, world);
+    const auto frame_start = get_time();
     std::stringstream ss;
     ss << "animate/frame_" << std::setw(3) << std::setfill('0') << i << ".bmp";
-    ray_trace_output->write(ImageFormat::BMP, ss.str());
-    INFO("Wrote " + ss.str());
+    const std::string file_name = ss.str();
+
+    const Vector3f camera_loc{distance * sin(M_PI * i / 180.),
+                              distance * cos(M_PI * i / 180.),
+                              distance / 3. + height_offset};
+    const Vector3f look_at{0, 0, height_offset};
+
+    const Camera camera{camera_loc, look_at};
+    std::unique_ptr<Image> ray_trace_output =
+        ray_tracer.trace(camera, world, file_name);
+    ray_trace_output->write(ImageFormat::BMP, file_name);
+    const auto frame_end = get_time();
+    const auto frame_nanoseconds =
+        static_cast<std::chrono::nanoseconds>(frame_end - frame_start).count();
+    INFO("Wrote " + ss.str() + " in " +
+         std::to_string(frame_nanoseconds / 1000000000) + "s");
   }
 
   INFO("Terminating program");

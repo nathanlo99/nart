@@ -14,12 +14,13 @@
 #include <vector>
 
 // ================================= Logging ==================================
+inline auto get_time() { return std::chrono::high_resolution_clock::now(); }
+
 #ifdef LOG
-static auto program_start_time = std::chrono::high_resolution_clock::now();
+static auto program_start_time = get_time();
 inline void log(const std::string &type, const std::string &msg) {
   const auto nano =
-      static_cast<std::chrono::nanoseconds>(
-          std::chrono::high_resolution_clock::now() - program_start_time)
+      static_cast<std::chrono::nanoseconds>(get_time() - program_start_time)
           .count();
   std::cout << std::setw(15) << std::left << nano << " : " << type << " " << msg
             << std::endl;
@@ -31,8 +32,6 @@ inline void log(const std::string &type, const std::string &msg) {
   log("[ERROR]", std::string{} + __FILE__ + " (" + __FUNCTION__ + ":" +        \
                      std::to_string(__LINE__) + ") >> " + (s))
 #else
-inline void info(const std::string &msg) {}
-inline void error(const std::string &msg) {}
 #define INFO(s)
 #define ERROR(s)
 #endif // ifdef LOG
@@ -42,7 +41,7 @@ inline void error(const std::string &msg) {}
 template <class T>
 constexpr
     typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-    fequal(T x, T y, int ulp = 2) {
+    fequal(const T x, const T y, const int ulp = 2) {
   return std::abs(x - y) <=
              std::numeric_limits<T>::epsilon() * std::abs(x + y) * ulp ||
          std::abs(x - y) < std::numeric_limits<T>::min();
@@ -51,7 +50,7 @@ constexpr
 template <class T>
 constexpr
     typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-    fzero(T x, int ulp = 2) {
+    fzero(const T x, const int ulp = 2) {
   return std::abs(x) <= std::numeric_limits<T>::epsilon() * ulp;
 }
 

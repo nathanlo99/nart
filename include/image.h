@@ -24,9 +24,13 @@ public:
   Image(ImageFormat format, const std::string &location);
 
   Color at(float x, float y) const;
-  Color &get(size_t x, size_t y) { return data[y * width + x]; }
-  const Color &get(size_t x, size_t y) const { return data[y * width + x]; }
-  void set(size_t x, size_t y, Color c) const { data[y * width + x] = c; }
+  Color &get(size_t x, size_t y) noexcept { return data[y * width + x]; }
+  const Color &get(size_t x, size_t y) const noexcept {
+    return data[y * width + x];
+  }
+  void set(size_t x, size_t y, Color c) const noexcept {
+    data[y * width + x] = c;
+  }
 
   void write(ImageFormat format, const std::string &location);
 };

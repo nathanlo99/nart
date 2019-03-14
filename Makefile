@@ -5,10 +5,10 @@ TARGET := bin/raytracer
 SOURCES := $(shell find src -type f -name *.cpp)
 OBJECTS := $(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 DEPENDS := ${OBJECTS:.o=.d}
-FASTFLAGS := -flto -fwhole-program-vtables -Ofast
+FASTFLAGS := -flto -fwhole-program-vtables -Ofast -march=native
 DEBUGFLAGS := -fsanitize=undefined,nullability -fno-omit-frame-pointer -O2 -g -Wall -Wextra -pedantic -Wconversion -Wunreachable-code -Wuninitialized -Wold-style-cast -Wno-error=unused-parameter -Wno-error=unused-variable -Weffc++ -Wfloat-equal -Wmost
 
-CFLAGS := -std=c++17 -fopenmp -MMD -DLOG $(FASTFLAGS)
+CFLAGS := -std=c++17 -fopenmp -D_GLIBCXX_PARALLEL -MMD -DLOG $(FASTFLAGS)
 
 LIB := -lbenchmark -pthread -lc++abi
 INC := -I include

@@ -16,7 +16,7 @@ protected:
 
 public:
   Object() {}
-  virtual ~Object() {}
+  virtual ~Object() noexcept {}
 
   virtual bool intersects(const Ray &ray, double min_dist,
                           double max_dist) const = 0;
@@ -24,8 +24,8 @@ public:
   virtual std::tuple<double, Color, Vector3f>
   intersect(const Ray &ray, double max_dist) const = 0;
 
-  World *getWorld() { return world; }
-  void setWorld(World *world) { this->world = world; }
+  World *getWorld() const noexcept { return world; }
+  void setWorld(World *world) noexcept { this->world = world; }
 };
 
 #endif

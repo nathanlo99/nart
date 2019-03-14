@@ -16,7 +16,7 @@ Color World::intersect(const Ray &ray, size_t depth) const {
   for (const auto &x : objects) {
     double tmp_dist;
     Color tmp_col;
-    Vector3f tmp_normal{0, 0, 0};
+    Vector3f tmp_normal;
     const auto &intersection_result = x->intersect(ray, dist);
     std::tie(tmp_dist, tmp_col, tmp_normal) = intersection_result;
     if (tmp_dist > accuracy && tmp_dist < dist) {
@@ -27,10 +27,18 @@ Color World::intersect(const Ray &ray, size_t depth) const {
   if (!intersected)
     return background; // Skip diffuse, specular
 
+  normal = normal.normalize();
+
   const double bias = 0.001;
-  // normal = -1 * normal; // TODO: Some models require this, some do not.
   const Vector3f intersection_point = ray.start + dist * ray.direction;
-  const double ambient = 0.1, diffuse = 0.7, specular = 0.3, alpha = 100;
+
+  const Vector3f reflection_direction =
+      ray.direction - 2 * (ray.direction.dot(normal)) * normal;
+  const Ray reflection_ray{intersection_point, reflection_direction};
+  const Color reflected_color = World::intersect(reflection_ray, depth - 1);
+
+  const double ambient = 0.1, reflect = 0.2, diffuse = 0.7, specular = 0.25,
+               alpha = 100;
 
   Color diffuse_color{0, 0, 0}, specular_color{0, 0, 0};
 
@@ -44,10 +52,10 @@ Color World::intersect(const Ray &ray, size_t depth) const {
     const Ray shadow_ray{intersection_point, Lm};
     const double intersection_threshold = accuracy;
     bool obstacles = false;
-    if (Lm.dot(N) < accuracy)
+    const double cosine_angle = Lm.dot(N);
+    if (cosine_angle < accuracy)
       continue;
     for (const auto &x : objects) {
-      double tmp_dist;
       if (x->intersects(shadow_ray, intersection_threshold, light_dist)) {
         obstacles = true;
         break;
@@ -55,13 +63,12 @@ Color World::intersect(const Ray &ray, size_t depth) const {
     }
     if (!obstacles) {
       const Color light_color = light->getColor(intersection_point);
-      if (Lm.dot(N) > 0)
-        diffuse_color = diffuse_color + Lm.dot(N) * light_color;
+      diffuse_color = diffuse_color + cosine_angle * light_color;
       if (Rm.dot(V) > 0)
         specular_color = specular_color + pow(Rm.dot(V), alpha) * light_color;
     }
   }
-  const Color result = ambient * ambient_color + diffuse * diffuse_color +
-                       specular * specular_color;
+  const Color result = ambient * ambient_color + reflect * reflected_color +
+                       diffuse * diffuse_color + specular * specular_color;
   return result.clamp();
 }

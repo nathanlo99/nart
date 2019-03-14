@@ -45,12 +45,11 @@ void Image::write(ImageFormat format, const std::string &location) {
 
     std::vector<unsigned char> buf(3 * width * height);
     const char *signed_buf = reinterpret_cast<const char *>(&buf[0]);
-    const Color *image_data = data.get();
-    size_t idx = 0;
+#pragma omp parallel for ordered
     for (size_t i = 0; i < width * height; ++i) {
-      buf[idx++] = static_cast<unsigned char>(floor(image_data[i].b * 255));
-      buf[idx++] = static_cast<unsigned char>(floor(image_data[i].g * 255));
-      buf[idx++] = static_cast<unsigned char>(floor(image_data[i].r * 255));
+      buf[3 * i + 0] = static_cast<unsigned char>(floor(data[i].b * 255));
+      buf[3 * i + 1] = static_cast<unsigned char>(floor(data[i].g * 255));
+      buf[3 * i + 2] = static_cast<unsigned char>(floor(data[i].r * 255));
     }
     out_file.write(signed_buf, 3L * width * height);
   }
