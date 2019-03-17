@@ -25,7 +25,7 @@ int main() {
   // RayTracer ray_tracer{1680, 1050, 60};
   RayTracer ray_tracer{800, 500, 60};
   // RayTracer ray_tracer{300, 200, 60};
-  const double distance = 3, height_offset = 0;
+  const double distance = 400, height_offset = 0;
 
   // // Add all sorts of objects
   // world.addObject(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 1,
@@ -37,10 +37,10 @@ int main() {
   //     std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5, Color::YELLOW));
   // world.addObject(
   //     std::make_unique<Sphere>(Vector3f{0, -1, 0}, 0.25, Color::GREEN));
-  world.addObject(std::make_unique<Plane>(Vector3f{0, 0, 0}, Vector3f{0, 0, 1},
-                                          0.3 * Color::BLACK));
+  world.addObject(std::make_unique<Plane>(
+      Vector3f{0, 0, -50}, Vector3f{0, 0, 1}, 0.3 * Color::BLACK));
 
-  world.addObject(std::make_unique<Model>("cow", ModelTraits::OBJ));
+  world.addObject(std::make_unique<Model>("teapot", ModelTraits::OBJ));
   // world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
   // Let there be light!

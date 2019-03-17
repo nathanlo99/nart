@@ -100,5 +100,5 @@ std::vector<Face> loadOBJ(const std::string &obj_file_name) {
 
 bool intersectsAABB(Ray ray, Vector3f p1, Vector3f p2, double min_dist,
                     double max_dist) noexcept {
-  //
+  return true;
 }

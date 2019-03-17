@@ -65,6 +65,7 @@ struct Face : public Object {
 // A 3D model, possibly textured
 class Model : public Object {
   std::vector<Face> data;
+  Vector3f min_corner, max_corner;
 
 public:
   explicit Model(const std::string &name, ModelTraits option = MODEL);

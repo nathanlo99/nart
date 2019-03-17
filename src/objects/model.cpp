@@ -28,6 +28,22 @@ Model::Model(const std::string &name, ModelTraits option) {
 
   // Load .obj file here
   data = loadOBJ(obj_file_name);
+
+  if (!data.empty()) {
+    Vector3f min_corner, max_corner;
+    min_corner = max_corner = data[0].vertex_a;
+    for (const auto &face : data) {
+      min_corner = min(min_corner, face.vertex_a);
+      min_corner = min(min_corner, face.vertex_b);
+      min_corner = min(min_corner, face.vertex_c);
+      max_corner = max(max_corner, face.vertex_a);
+      max_corner = max(max_corner, face.vertex_b);
+      max_corner = max(max_corner, face.vertex_c);
+    }
+    this->min_corner = min_corner;
+    this->max_corner = max_corner;
+  }
+  std::cout << min_corner << ", " << max_corner << std::endl;
 }
 
 bool Face::intersects(const Ray &ray, double min_dist, double max_dist) const {
@@ -81,6 +97,8 @@ std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray,
 }
 
 bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {
+  if (!intersectsAABB(ray, min_corner, max_corner))
+    return false;
   for (const auto &face : data) {
     if (face.intersects(ray, min_dist, max_dist))
       return true;
@@ -90,6 +108,9 @@ bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {
 
 std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray,
                                                      double max_dist) const {
+  if (!intersectsAABB(ray, min_corner, max_corner))
+    return {-1, {0, 0, 0}, {0, 0, 0}};
+
   double closest_dist = 10000.0, cur_dist;
   bool intersected = false;
   Color closest_color = Color::BLACK, cur_color;

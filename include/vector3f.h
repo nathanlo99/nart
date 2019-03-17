@@ -61,6 +61,15 @@ template <typename T> constexpr T Vector<T>::norm() const noexcept {
   return sqrt(dot(*this));
 }
 
+template <typename T>
+constexpr Vector<T> min(const Vector<T> a, const Vector<T> b) {
+  return {std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z)};
+}
+template <typename T>
+constexpr Vector<T> max(const Vector<T> a, const Vector<T> b) {
+  return {std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z)};
+}
+
 template <typename T> constexpr Vector<T> Vector<T>::normalize() const {
   const T nm = norm();
   // if (fzero(nm))

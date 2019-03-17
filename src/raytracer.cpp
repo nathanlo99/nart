@@ -20,14 +20,14 @@ std::unique_ptr<Image> RayTracer::trace(const Camera &camera,
   int percent = 0;
   auto last_ms = milli_time();
 
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for schedule(guided) collapse(2)
   for (size_t y = 0; y < screen_height; y++) {
     for (size_t x = 0; x < screen_width; x++) {
       Color result_color{0, 0, 0};
 #pragma omp parallel for
       for (size_t i = 0; i < aa_num * aa_num; i++) {
-        const float rx = (double)(i / aa_num) / aa_num,
-                    ry = (double)(i % aa_num) / aa_num;
+        float rx = (double)(i / aa_num) / aa_num,
+              ry = (double)(i % aa_num) / aa_num;
         // rx = random<float>(), ry = random<float>();
         const Vector3f dir = forward                               //
                              + (x - (screen_width / 2.) + rx) * dx //
