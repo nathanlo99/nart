@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 
+// A 3-element mathematical vector
 template <typename T> struct Vector {
   T x = 0, y = 0, z = 0;
   using type = T;
@@ -82,6 +83,8 @@ std::ostream &operator<<(std::ostream &os, const Vector<T> &vec) noexcept {
   return os << vec.to_string();
 }
 
+// Overload 'Vector3f' and the associated accuracy to which we perform
+// calculations
 using Vector3f = Vector<double>;
 #define accuracy 0.00001
 

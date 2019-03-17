@@ -3,6 +3,7 @@
 
 #include <cmath>
 
+// TODO: toggle between random sampling and uniform square super-sampling
 std::unique_ptr<Image> RayTracer::trace(const Camera &camera,
                                         const World &world,
                                         const std::string &render_name) {

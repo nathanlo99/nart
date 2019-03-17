@@ -5,7 +5,10 @@
 
 #include "vector3f.h"
 
+// Encapsulates data about the point from which rays are cast
 class Camera final {
+  // The location of the camera, as well as normalized vectors for the three
+  // relative directions
   Vector3f location, forward, right, up;
 
 public:

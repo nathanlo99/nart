@@ -6,6 +6,7 @@
 #include "ray.h"
 #include "vector3f.h"
 
+// A 3D sphere with a uniform color.
 class Sphere : public Object {
   Vector3f center;
   float radius;

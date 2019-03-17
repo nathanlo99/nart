@@ -6,7 +6,9 @@
 #include "light.h"
 #include "vector3f.h"
 
+// A simple light which radiates the same color in every direction
 class PointLight : public Light {
+  // The color of the light
   Color color;
 
 public:

@@ -95,6 +95,7 @@ std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray,
   Color closest_color = Color::BLACK, cur_color;
   Vector3f closest_normal, cur_normal;
 
+  // Returns the closest triangle which the ray intersects
   for (const auto &face : data) {
     const auto &intersect_result = face.intersect(ray, closest_dist);
     std::tie(cur_dist, cur_color, cur_normal) = intersect_result;

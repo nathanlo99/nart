@@ -14,6 +14,7 @@
 #include <vector>
 
 // ================================= Logging ==================================
+// Gets the current time, in nanoseconds (as a std::chrono::time_point)
 inline auto get_time() { return std::chrono::high_resolution_clock::now(); }
 
 #ifdef LOG
@@ -24,9 +25,11 @@ inline void log(const std::string &type, const std::string &msg) {
   std::cout << std::setw(15) << std::left << nano << " : " << type << " " << msg
             << std::endl;
 }
+// Gets the number of nanoseconds since the program started
 inline long long nano_time() {
   return std::chrono::nanoseconds(get_time() - program_start_time).count();
 }
+// Gets the number of milliseconds since the program started
 inline long long milli_time() { return nano_time() / 1000000; }
 #define INFO(s)                                                                \
   log("[INFO]", std::string{} + __FILE__ + " (" + __FUNCTION__ + ":" +         \
@@ -41,6 +44,9 @@ inline long long milli_time() { return nano_time() / 1000000; }
 
 // ================================= Logging ==================================
 
+// Returns true if the floating point values x and y are equal to 'ulp' ulps
+// NOTE: ALWAYS use this when comparing floating point values, the compiler will
+// complain otherwise (for good reason)
 template <class T>
 constexpr
     typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
@@ -50,6 +56,9 @@ constexpr
          std::abs(x - y) < std::numeric_limits<T>::min();
 }
 
+// Returns true if the floating-point value x is equal to 0 to 'ulp' ulps
+// NOTE: ALWAYS use this when comparing a floating value to 0, this is an
+// optimization to the above function
 template <class T>
 constexpr
     typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
@@ -59,6 +68,7 @@ constexpr
 
 // ============================================================================
 
+// Returns a random value of floating-point type T between 0 and 1
 template <typename T> T random() {
   static const auto seed =
       std::chrono::system_clock().now().time_since_epoch().count();
@@ -69,12 +79,13 @@ template <typename T> T random() {
 
 // ============================================================================
 
+// Quality-of-life debugging functions to print tuples and vectors (assumes that
+// operator<< is overloaded for all types)
 template <typename S, typename T, typename U>
 std::ostream &operator<<(std::ostream &os, const std::tuple<S, T, U> &x) {
   return os << "(" << std::get<0>(x) << ", " << std::get<1>(x) << ", "
             << std::get<2>(x) << ")";
 }
-
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
   if (v.empty())

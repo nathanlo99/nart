@@ -3,7 +3,9 @@
 
 #include "objects/object.h"
 
+// An infinite plane in 3D, with a uniform color.
 class Plane : public Object {
+  // A single point on the plane, and any normalized normal vector
   Vector3f point, normal;
   Color color;
 

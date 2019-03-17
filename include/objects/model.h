@@ -13,18 +13,30 @@
 #include "ray.h"
 #include "vector3f.h"
 
+// Used as an argument to the Model constructor, differentiates between .obj
+// (standalone 3D models) and models (.obj's with textures)
 enum ModelTraits { OBJ, MODEL };
 
+// A texture coordinate in a texture file, stored in pixels. They are
+// floating-point numbers to support exact interpolation on triangular meshes
 struct TextureCoord {
   float x = 0, y = 0;
   TextureCoord() noexcept {}
   TextureCoord(float x, float y) noexcept : x{x}, y{y} {}
 };
 
+// A face stores all the necessary information stored in an individual triangle
+// of a model
 struct Face : public Object {
+  // The positions of the three vertices *stored counter-clockwise if looking
+  // from 'outside'*
   Vector3f vertex_a, vertex_b, vertex_c;
+  // 'plane_normal' is the normal of the triangle, the others are the normals
+  // from the model, used to interpolate and smooth
   Vector3f plane_normal, normal_a, normal_b, normal_c;
+  // Textures from the model directory, used for interpolation
   TextureCoord texture_a, texture_b, texture_c;
+  // Stores reflective/refractive properties of the object
   Material material;
 
   Face(const Vector3f &a, const Vector3f &b, const Vector3f &c) noexcept
@@ -43,12 +55,14 @@ struct Face : public Object {
     if (fzero(normal_a.norm()))
       this->normal_a = this->normal_b = this->normal_c = plane_normal;
   }
+
   bool intersects(const Ray &ray, double min_dist,
                   double max_dist) const override;
   std::tuple<double, Color, Vector3f> intersect(const Ray &ray,
                                                 double max_dist) const override;
 };
 
+// A 3D model, possibly textured
 class Model : public Object {
   std::vector<Face> data;
 

@@ -21,6 +21,13 @@ int main() {
   INFO("Starting program");
 
   World world;
+
+  // RayTracer ray_tracer{1680, 1050, 60};
+  RayTracer ray_tracer{800, 500, 60};
+  // RayTracer ray_tracer{300, 200, 60};
+  const double distance = 3, height_offset = 0;
+
+  // // Add all sorts of objects
   // world.addObject(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 1,
   // Color::RED)); world.addObject(
   //     std::make_unique<Sphere>(Vector3f{1, 0, 0}, 0.5, Color::WHITE));
@@ -36,10 +43,7 @@ int main() {
   world.addObject(std::make_unique<Model>("cow", ModelTraits::OBJ));
   // world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
-  // RayTracer ray_tracer{1680, 1050, 60};
-  RayTracer ray_tracer{800, 500, 60};
-  // RayTracer ray_tracer{300, 200, 60};
-  const double distance = 3, height_offset = 0;
+  // Let there be light!
   world.addLight(std::make_unique<PointLight>(Vector3f{distance, 0, distance},
                                               0.3 * Color::WHITE));
   world.addLight(std::make_unique<PointLight>(Vector3f{0, distance, distance},
@@ -49,6 +53,7 @@ int main() {
   world.addLight(std::make_unique<PointLight>(Vector3f{0, -distance, distance},
                                               0.3 * Color::GREEN));
 
+  // Renders 360 frames of our scene in a rotating frame-of-reference
   for (int i = 0; i < 360; ++i) {
     const auto frame_start = milli_time();
     std::stringstream ss;
@@ -68,7 +73,7 @@ int main() {
     INFO("Wrote " + ss.str() + " in " + std::to_string(frame_ms / 1000) + "s");
   }
 
-  INFO("Terminating program");
+  // INFO("Terminating program");
   // if (stdout_redirected)
   //   fclose(stdout);
   // INFO("Log at " + log_name);

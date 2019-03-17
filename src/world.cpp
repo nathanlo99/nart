@@ -13,6 +13,7 @@ Color World::intersect(const Ray &ray, size_t depth) const {
   bool intersected = false;
   Vector3f normal{0, 0, 0};
 
+  // Find the closest object in the direction the ray is cast
   for (const auto &x : objects) {
     double tmp_dist;
     Color tmp_col;
@@ -35,13 +36,18 @@ Color World::intersect(const Ray &ray, size_t depth) const {
   const Vector3f reflection_direction =
       ray.direction - 2 * (ray.direction.dot(normal)) * normal;
   const Ray reflection_ray{intersection_point, reflection_direction};
+
+  // Recursively find the reflected color
   const Color reflected_color = World::intersect(reflection_ray, depth - 1);
 
+  // TODO: replace this with Material values
   const double ambient = 0.1, reflect = 0.2, diffuse = 0.7, specular = 0.25,
                alpha = 100;
 
   Color diffuse_color{0, 0, 0}, specular_color{0, 0, 0};
 
+  // For each light, check if the light is in direct line-of-sight, if so, add
+  // its luminous effect
   for (const auto &light : lights) {
     const Vector3f light_pos = light->getPos();
     const double light_dist = (light_pos - intersection_point).norm();

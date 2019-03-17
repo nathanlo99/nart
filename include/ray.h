@@ -3,6 +3,7 @@
 
 #include "vector3f.h"
 
+// Encapsulates a ray in 3D
 struct Ray {
   Vector3f start, direction;
 };

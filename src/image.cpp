@@ -8,7 +8,8 @@
 #include <string>
 #include <vector>
 
-void Image::write(ImageFormat format, const std::string &location) {
+// TODO: Something is wrong with the BMP header, look into this at some point
+void Image::write(ImageFormat format, const std::string &location) const {
   if (format == ImageFormat::JPG) {
   } else if (format == ImageFormat::PNG) {
   } else if (format == ImageFormat::BMP) {

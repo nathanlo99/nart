@@ -10,11 +10,15 @@
 #include <memory>
 #include <vector>
 
+// Represents a 3D scene, containing objects and lights
 class World {
   std::vector<std::unique_ptr<Object>> objects;
   std::vector<std::unique_ptr<Light>> lights;
 
+  // The rendering distance
+  // TODO: perhaps this is more suited for RayTracer?
   double max_dist = 10000.0;
+  // The background color, used when a ray does not intersect any objects
   Color background = Color::BLACK;
 
 public:
@@ -32,6 +36,8 @@ public:
     lights.push_back(std::move(light));
   }
 
+  // Returns the color resulting from tracing the specified ray in this world,
+  // with max recursive depth 'depth'
   Color intersect(const Ray &ray, size_t depth) const;
 };
 
