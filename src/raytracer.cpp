@@ -17,6 +17,7 @@ std::unique_ptr<Image> RayTracer::trace(const Camera &camera,
   const size_t num_pixels = screen_height * screen_width;
   size_t num_processed = 0;
   int percent = 0;
+  auto last_ms = milli_time();
 
 #pragma omp parallel for collapse(2)
   for (size_t y = 0; y < screen_height; y++) {
@@ -42,13 +43,18 @@ std::unique_ptr<Image> RayTracer::trace(const Camera &camera,
         int new_percent = num_processed * 100 / num_pixels;
 
         if (new_percent != percent) {
-          INFO("Completed " + std::to_string(new_percent) + "% of " +
-               render_name);
-          percent = new_percent;
-          result->write(ImageFormat::BMP, "tmp/" + render_name);
+          const auto cur_ms = milli_time();
+          if (cur_ms - last_ms > 1000) {
+            last_ms = cur_ms;
+            INFO("Completed " + std::to_string(new_percent) + "% of " +
+                 render_name);
+            percent = new_percent;
+            result->write(ImageFormat::BMP, "tmp/" + render_name);
+          }
         }
       }
     }
   }
+  result->write(ImageFormat::BMP, "tmp/" + render_name);
   return result;
 }

@@ -20,11 +20,14 @@ inline auto get_time() { return std::chrono::high_resolution_clock::now(); }
 static auto program_start_time = get_time();
 inline void log(const std::string &type, const std::string &msg) {
   const auto nano =
-      static_cast<std::chrono::nanoseconds>(get_time() - program_start_time)
-          .count();
+      std::chrono::nanoseconds(get_time() - program_start_time).count();
   std::cout << std::setw(15) << std::left << nano << " : " << type << " " << msg
             << std::endl;
 }
+inline long long nano_time() {
+  return std::chrono::nanoseconds(get_time() - program_start_time).count();
+}
+inline long long milli_time() { return nano_time() / 1000000; }
 #define INFO(s)                                                                \
   log("[INFO]", std::string{} + __FILE__ + " (" + __FUNCTION__ + ":" +         \
                     std::to_string(__LINE__) + ") >> " + (s))

@@ -97,3 +97,7 @@ std::vector<Face> loadOBJ(const std::string &obj_file_name) {
        std::to_string(normals.size() - 1) + " normals");
   return data;
 }
+
+bool intersectsAABB(Ray ray, Vector3f p1, Vector3f p2) noexcept {
+  //
+}
