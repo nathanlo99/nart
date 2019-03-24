@@ -97,7 +97,7 @@ std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray,
 }
 
 bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {
-  if (!intersectsAABB(ray, min_corner, max_corner))
+  if (!intersectsAABB(ray, min_corner, max_corner, min_dist, max_dist))
     return false;
   for (const auto &face : data) {
     if (face.intersects(ray, min_dist, max_dist))
@@ -108,19 +108,19 @@ bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {
 
 std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray,
                                                      double max_dist) const {
-  if (!intersectsAABB(ray, min_corner, max_corner))
+  if (!intersectsAABB(ray, min_corner, max_corner, accuracy, max_dist))
     return {-1, {0, 0, 0}, {0, 0, 0}};
 
-  double closest_dist = 10000.0, cur_dist;
+  double closest_dist = max_dist;
   bool intersected = false;
-  Color closest_color = Color::BLACK, cur_color;
-  Vector3f closest_normal, cur_normal;
+  Color closest_color = Color::BLACK;
+  Vector3f closest_normal;
 
   // Returns the closest triangle which the ray intersects
   for (const auto &face : data) {
     const auto &intersect_result = face.intersect(ray, closest_dist);
-    std::tie(cur_dist, cur_color, cur_normal) = intersect_result;
-    if (cur_dist > accuracy && cur_dist < max_dist) {
+    const auto &[cur_dist, cur_color, cur_normal] = intersect_result;
+    if (cur_dist > accuracy) {
       std::tie(closest_dist, closest_color, closest_normal) = intersect_result;
       intersected = true;
     }

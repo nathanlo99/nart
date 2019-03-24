@@ -15,11 +15,8 @@ Color World::intersect(const Ray &ray, size_t depth) const {
 
   // Find the closest object in the direction the ray is cast
   for (const auto &x : objects) {
-    double tmp_dist;
-    Color tmp_col;
-    Vector3f tmp_normal;
     const auto &intersection_result = x->intersect(ray, dist);
-    std::tie(tmp_dist, tmp_col, tmp_normal) = intersection_result;
+    const auto &[tmp_dist, tmp_col, tmp_normal] = intersection_result;
     if (tmp_dist > accuracy && tmp_dist < dist) {
       std::tie(dist, ambient_color, normal) = intersection_result;
       intersected = true;

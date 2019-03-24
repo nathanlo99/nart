@@ -65,10 +65,9 @@ std::vector<Face> loadOBJ(const std::string &obj_file_name) {
       if (indices.size() != 3)
         ERROR("Faces with != 3 vertices not yet supported");
 
-      unsigned int v1, v2, v3, vt1, vt2, vt3, vn1, vn2, vn3;
-      std::tie(v1, vt1, vn1) = indices[0];
-      std::tie(v2, vt2, vn2) = indices[1];
-      std::tie(v3, vt3, vn3) = indices[2];
+      const auto &[v1, vt1, vn1] = indices[0];
+      const auto &[v2, vt2, vn2] = indices[1];
+      const auto &[v3, vt3, vn3] = indices[2];
       const Vector3f vertex_a = vertices[v1], vertex_b = vertices[v2],
                      vertex_c = vertices[v3];
       const TextureCoord texture_a = texture_coords[vt1],
@@ -98,7 +97,43 @@ std::vector<Face> loadOBJ(const std::string &obj_file_name) {
   return data;
 }
 
-bool intersectsAABB(Ray ray, Vector3f p1, Vector3f p2, double min_dist,
-                    double max_dist) noexcept {
+constexpr inline std::pair<float, float> getInterval(const float start,
+                                                     const float direction,
+                                                     const float min,
+                                                     const float max) {
+  if (fzero(direction)) {
+    if (min <= start && start <= max) {
+      const float inf = std::numeric_limits<float>::infinity();
+      return std::make_pair(-inf, inf);
+    } else
+      return std::make_pair(0, 0);
+  } else if (direction > 0) {
+    return std::make_pair((min - start) / direction, (max - start) / direction);
+  } else {
+    return std::make_pair((max - start) / direction, (min - start) / direction);
+  }
+}
+
+bool intersectsAABB(const Ray &ray, const Vector3f &p1, const Vector3f &p2,
+                    const double min_dist, const double max_dist) noexcept {
+  float interval_min = std::max(0.0, min_dist), interval_max = max_dist;
+  const auto &[x_min, x_max] =
+      getInterval(ray.start.x, ray.direction.x, p1.x, p2.x);
+  interval_min = std::max(interval_min, x_min);
+  interval_max = std::min(interval_max, x_max);
+  if (interval_min >= interval_max)
+    return false;
+  const auto &[y_min, y_max] =
+      getInterval(ray.start.y, ray.direction.y, p1.y, p2.y);
+  interval_min = std::max(interval_min, y_min);
+  interval_max = std::min(interval_max, y_max);
+  if (interval_min >= interval_max)
+    return false;
+  const auto &[z_min, z_max] =
+      getInterval(ray.start.z, ray.direction.z, p1.z, p2.z);
+  interval_min = std::max(interval_min, z_min);
+  interval_max = std::min(interval_max, z_max);
+  if (interval_min >= interval_max)
+    return false;
   return true;
 }
