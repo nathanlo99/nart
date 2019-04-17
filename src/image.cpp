@@ -8,19 +8,25 @@
 #include <string>
 #include <vector>
 
+inline int ceil_div(int a, int b) { return a / b + (a % b != 0); }
+
 // TODO: Something is wrong with the BMP header, look into this at some point
 void Image::write(ImageFormat format, const std::string &location) const {
   if (format == ImageFormat::JPG) {
   } else if (format == ImageFormat::PNG) {
   } else if (format == ImageFormat::BMP) {
     std::ofstream out_file{"output/" + location, std::ofstream::binary};
-    const size_t size_bytes = 3 * width * height;
-    const size_t file_size = 14 + 40 + size_bytes;
+    const unsigned int row_size = ceil_div(3 * width, 4) * 4;
+    const unsigned int size_bytes = row_size * height;
+    const unsigned int file_size = 14 + 40 + size_bytes;
 
     const int ppm = 2808;
     unsigned char bmp_header[14] = {'B', 'M', 0, 0, 0, 0, 54, 0, 0, 0};
     unsigned char dib_header[40] = {40, 0, 0, 0, 0, 0, 0,  0,
                                     0,  0, 0, 0, 1, 0, 24, 0};
+
+    std::cout << width << ", " << height << std::endl;
+    std::cout << file_size << std::endl;
     bmp_header[2] = static_cast<unsigned char>(file_size);
     bmp_header[3] = static_cast<unsigned char>(file_size >> 8);
     bmp_header[4] = static_cast<unsigned char>(file_size >> 16);

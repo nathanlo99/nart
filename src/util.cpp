@@ -133,7 +133,5 @@ bool intersectsAABB(const Ray &ray, const Vector3f &p1, const Vector3f &p2,
       getInterval(ray.start.z, ray.direction.z, p1.z, p2.z);
   interval_min = std::max(interval_min, z_min);
   interval_max = std::min(interval_max, z_max);
-  if (interval_min >= interval_max)
-    return false;
-  return true;
+  return interval_min < interval_max;
 }

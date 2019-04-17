@@ -18,7 +18,7 @@ class RayTracer {
   // Horizontal field of view, in degrees
   double horizontal_fov = 60;
   // Maximum recursive depth, for reflection ray-casts
-  size_t max_depth = 5;
+  size_t max_depth = 10;
   // We super-sample each pixel in a square with aa_num points and average them
   size_t aa_num = 1;
 
@@ -32,8 +32,8 @@ public:
 
   // Traces the scene in 'world' as viewed by 'camera' and returns the result as
   // an Image
-  std::unique_ptr<Image> trace(const Camera &camera, const World &world,
-                               const std::string &render_name);
+  Image trace(const Camera &camera, const World &world,
+              const std::string &render_name);
 };
 
 #endif

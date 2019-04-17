@@ -62,8 +62,17 @@ struct Face : public Object {
                                                 double max_dist) const override;
 };
 
+class RawOBJ {
+  std::vector<Vector3f> vertices;
+  std::vector<std::tuple<TextureCoord, TextureCoord, TextureCoord>>
+      texture_coords;
+  std::vector<std::tuple<Vector3f, Vector3f, Vector3f>> normals;
+  std::vector<std::tuple<int, int, int>> faces;
+};
+
 // A 3D model, possibly textured
 class Model : public Object {
+  RawOBJ rawOBJ;
   std::vector<Face> data;
   Vector3f min_corner, max_corner;
 

@@ -78,22 +78,15 @@ std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray,
   if (dist > max_dist || dist < accuracy)
     return {-1, {0, 0, 0}, {0, 0, 0}};
   const Vector3f point = ray.start + dist * ray.direction;
-  const double cross1 =
-      (vertex_c - vertex_a).cross(point - vertex_a).dot(plane_normal);
-  if (cross1 > 0)
+  if ((vertex_c - vertex_a).cross(point - vertex_a).dot(plane_normal) > 0)
     return {-1, {0, 0, 0}, {0, 0, 0}};
-  const double cross2 =
-      (vertex_a - vertex_b).cross(point - vertex_b).dot(plane_normal);
-  if (cross2 > 0)
+  if ((vertex_a - vertex_b).cross(point - vertex_b).dot(plane_normal) > 0)
     return {-1, {0, 0, 0}, {0, 0, 0}};
-  const double cross3 =
-      (vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal);
-  if (cross3 > 0)
+  if ((vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal) > 0)
     return {-1, {0, 0, 0}, {0, 0, 0}};
-  Vector3f normal = plane_normal;
-  if (normal.dot(ray.direction) > 0)
-    normal = -1 * plane_normal;
-  return {dist, Color::WHITE, normal};
+  if (plane_normal.dot(ray.direction) > 0)
+    return {dist, Color::WHITE, -1 * plane_normal};
+  return {dist, Color::WHITE, plane_normal};
 }
 
 bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {

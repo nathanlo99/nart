@@ -48,7 +48,7 @@ inline long long milli_time() { return nano_time() / 1000000; }
 // NOTE: ALWAYS use this when comparing floating point values, the compiler will
 // complain otherwise (for good reason)
 template <class T>
-constexpr
+constexpr inline
     typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
     fequal(const T x, const T y, const int ulp = 2) {
   return std::abs(x - y) <=
@@ -60,7 +60,7 @@ constexpr
 // NOTE: ALWAYS use this when comparing a floating value to 0, this is an
 // optimization to the above function
 template <class T>
-constexpr
+constexpr inline
     typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
     fzero(const T x, const int ulp = 2) {
   return std::abs(x) <= std::numeric_limits<T>::epsilon() * ulp;
@@ -69,12 +69,15 @@ constexpr
 // ============================================================================
 
 // Returns a random value of floating-point type T between 0 and 1
-template <typename T> T random() {
+template <typename T = float> T inline random() {
   static const auto seed =
       std::chrono::system_clock().now().time_since_epoch().count();
   static std::default_random_engine generator(seed);
   static std::uniform_real_distribution<T> distribution(0.0, 1.0);
   return distribution(generator);
+}
+template <typename T> T inline random(T min, T max) {
+  return min + random<T>() * (max - min);
 }
 
 // ============================================================================

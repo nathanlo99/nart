@@ -12,12 +12,16 @@ std::tuple<double, Color, Vector3f> Plane::intersect(const Ray &ray,
   // distance, which is handled correctly as a non-intersection by
   // World::intersect
 
+  const double dist = (point - ray.start).dot(normal) / vn;
+  if (dist > max_dist)
+    return {-1, Color::BLACK, {0, 0, 0}};
+
   // This simulates a matte reflection!
   const Vector3f dn =
-      0.03 * Vector3f{random<double>() - 0.5, random<double>() - 0.5,
+      0.00 * Vector3f{random<double>() - 0.5, random<double>() - 0.5,
                       random<double>() - 0.5};
   const Vector3f return_normal = (normal + dn).normalize();
-  return {(point - ray.start).dot(normal) / vn, color, return_normal};
+  return {dist, color, return_normal};
 }
 
 bool Plane::intersects(const Ray &ray, double min_dist, double max_dist) const {

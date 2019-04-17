@@ -4,20 +4,17 @@
 #include <cmath>
 
 // TODO: toggle between random sampling and uniform square super-sampling
-std::unique_ptr<Image> RayTracer::trace(const Camera &camera,
-                                        const World &world,
-                                        const std::string &render_name) {
+Image RayTracer::trace(const Camera &camera, const World &world,
+                       const std::string &render_name) {
   const Vector3f &camera_position = camera.getP(), &forward = camera.getF(),
                  &right = camera.getR(), &up = camera.getU();
   const double space_width = 2 * tan(M_PI * horizontal_fov / 360.);
   const double pixel_size = space_width / screen_width;
   const Vector3f dx = pixel_size * right, dy = pixel_size * up;
 
-  std::unique_ptr<Image> result =
-      std::make_unique<Image>(screen_height, screen_width);
+  Image result{screen_height, screen_width};
   const size_t num_pixels = screen_height * screen_width;
   size_t num_processed = 0;
-  float percent = 0;
   auto last_ms = milli_time();
 
 #pragma omp parallel for schedule(guided) collapse(2)
@@ -36,21 +33,21 @@ std::unique_ptr<Image> RayTracer::trace(const Camera &camera,
         const Color c = world.intersect(ray, max_depth);
         result_color = result_color + c;
       }
-      result->set(x, y, result_color / (float)(aa_num * aa_num));
+      result.set(x, y, result_color / (float)(aa_num * aa_num));
 
 #pragma omp critical
       {
         num_processed++;
-        percent = num_processed * 100. / num_pixels;
         const auto cur_ms = milli_time();
         if (cur_ms - last_ms > 1000) {
           last_ms = cur_ms;
+          const float percent = num_processed * 100. / num_pixels;
           INFO("Completed " + std::to_string(percent) + "% of " + render_name);
-          result->write(ImageFormat::BMP, "tmp/" + render_name);
+          result.write(ImageFormat::BMP, "tmp/" + render_name);
         }
       }
     }
   }
-  result->write(ImageFormat::BMP, "tmp/" + render_name);
+  result.write(ImageFormat::BMP, "tmp/" + render_name);
   return result;
 }
