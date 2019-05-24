@@ -7,7 +7,7 @@
 #include <vector>
 
 // Loads a .obj file and returns a list of triangles
-std::vector<Face> loadOBJ(const std::string &obj_file_name);
+RawOBJ loadOBJ(const std::string &obj_file_name);
 
 // Returns true if the specified ray intersects the axis-aligned bounding box
 // specified by opposite corners 'p1' and 'p2'

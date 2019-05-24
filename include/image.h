@@ -2,7 +2,6 @@
 #define IMAGE_H
 
 #include "color.h"
-
 #include <memory>
 
 // Specifies the format to read/write an image from/to

@@ -7,6 +7,7 @@
 #include "util.h"
 
 #include <array>
+#include <cassert>
 #include <climits>
 #include <fstream>
 #include <sstream>
@@ -27,22 +28,17 @@ Model::Model(const std::string &name, ModelTraits option) {
   }
 
   // Load .obj file here
-  data = loadOBJ(obj_file_name);
+  rawOBJ = loadOBJ(obj_file_name);
+  data = rawOBJ.data;
 
-  if (!data.empty()) {
-    Vector3f min_corner, max_corner;
-    min_corner = max_corner = data[0].vertex_a;
-    for (const auto &face : data) {
-      min_corner = min(min_corner, face.vertex_a);
-      min_corner = min(min_corner, face.vertex_b);
-      min_corner = min(min_corner, face.vertex_c);
-      max_corner = max(max_corner, face.vertex_a);
-      max_corner = max(max_corner, face.vertex_b);
-      max_corner = max(max_corner, face.vertex_c);
-    }
-    this->min_corner = min_corner;
-    this->max_corner = max_corner;
+  assert(!rawOBJ.vertices.empty());
+
+  min_corner = max_corner = rawOBJ.vertices[0];
+  for (const auto &vertex : rawOBJ.vertices) {
+    min_corner = min(min_corner, vertex);
+    max_corner = max(max_corner, vertex);
   }
+
   std::cout << min_corner << ", " << max_corner << std::endl;
 }
 

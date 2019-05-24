@@ -23,8 +23,7 @@ int main() {
   // RayTracer ray_tracer{1200, 900, 60};
   RayTracer ray_tracer{800, 500, 60};
   // RayTracer ray_tracer{500, 350, 60};
-  const float distance = 350, height_offset = 80,
-              wall_distance = distance * 1.005;
+  const float distance = 5, height_offset = 0, wall_distance = distance * 1.005;
 
   // // Add all sorts of objects
   // world.addObject(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 1,
@@ -61,8 +60,8 @@ int main() {
   //     std::make_unique<Sphere>(Vector3f{-wall_distance, -wall_distance, 0},
   //                              wall_distance * 0.5, Color::WHITE));
 
-  // world.addObject(std::make_unique<Model>("casting", ModelTraits::OBJ));
-  world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
+  world.addObject(std::make_unique<Model>("casting", ModelTraits::OBJ));
+  // world.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
   // Let there be light!
   world.addLight(std::make_unique<PointLight>(Vector3f{distance, 0, distance},

@@ -62,12 +62,16 @@ struct Face : public Object {
                                                 double max_dist) const override;
 };
 
-class RawOBJ {
+struct RawOBJ {
   std::vector<Vector3f> vertices;
-  std::vector<std::tuple<TextureCoord, TextureCoord, TextureCoord>>
-      texture_coords;
-  std::vector<std::tuple<Vector3f, Vector3f, Vector3f>> normals;
-  std::vector<std::tuple<int, int, int>> faces;
+  std::vector<std::tuple<int, int, int>> triangles;
+  std::vector<Face> data;
+
+  RawOBJ() : vertices{}, triangles{}, data{} {}
+  RawOBJ(std::vector<Vector3f> vertices,
+         std::vector<std::tuple<int, int, int>> triangles,
+         std::vector<Face> data)
+      : vertices{vertices}, triangles{triangles}, data{data} {}
 };
 
 // A 3D model, possibly textured

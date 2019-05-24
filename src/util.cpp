@@ -8,12 +8,13 @@
 #include <sstream>
 #include <vector>
 
-std::vector<Face> loadOBJ(const std::string &obj_file_name) {
+RawOBJ loadOBJ(const std::string &obj_file_name) {
   std::ifstream obj_file(obj_file_name);
   if (!obj_file)
     ERROR("Could not open obj file: " + obj_file_name);
 
   std::vector<Vector3f> vertices;
+  std::vector<std::tuple<int, int, int>> triangles;
   std::vector<TextureCoord> texture_coords;
   std::vector<Vector3f> normals;
   std::vector<Face> data;
@@ -75,6 +76,7 @@ std::vector<Face> loadOBJ(const std::string &obj_file_name) {
                          texture_c = texture_coords[vt3];
       const Vector3f normal_a = normals[vn1], normal_b = normals[vn2],
                      normal_c = normals[vn3];
+      triangles.emplace_back(v1, v2, v3);
       data.emplace_back(vertex_a, vertex_b, vertex_c, texture_a, texture_b,
                         texture_c, normal_a, normal_b, normal_c);
     } else if (line_kind == "usemtl") {
@@ -94,7 +96,7 @@ std::vector<Face> loadOBJ(const std::string &obj_file_name) {
        " faces, " + std::to_string(vertices.size() - 1) + " vertices, " +
        std::to_string(texture_coords.size() - 1) + " texture coords, " +
        std::to_string(normals.size() - 1) + " normals");
-  return data;
+  return {vertices, triangles, data};
 }
 
 constexpr inline std::pair<float, float> getInterval(const float start,

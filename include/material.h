@@ -19,7 +19,7 @@ struct Material {
   Color ambient = Color::WHITE, diffuse = Color::WHITE, spectral = Color::WHITE;
   float transparency = 0.f;
   int illum = 0;
-  std::unique_ptr<Image> ambient_texture, diffuse_texture;
+  std::shared_ptr<Image> ambient_texture, diffuse_texture;
 };
 
 #endif /* end of include guard: MATERIAL_H */

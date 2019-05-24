@@ -8,6 +8,11 @@
 #include <string>
 #include <vector>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 inline int ceil_div(int a, int b) { return a / b + (a % b != 0); }
 
 // TODO: Something is wrong with the BMP header, look into this at some point
@@ -15,50 +20,19 @@ void Image::write(ImageFormat format, const std::string &location) const {
   if (format == ImageFormat::JPG) {
   } else if (format == ImageFormat::PNG) {
   } else if (format == ImageFormat::BMP) {
-    std::ofstream out_file{"output/" + location, std::ofstream::binary};
-    const unsigned int row_size = ceil_div(3 * width, 4) * 4;
-    const unsigned int size_bytes = row_size * height;
-    const unsigned int file_size = 14 + 40 + size_bytes;
-
-    const int ppm = 2808;
-    unsigned char bmp_header[14] = {'B', 'M', 0, 0, 0, 0, 54, 0, 0, 0};
-    unsigned char dib_header[40] = {40, 0, 0, 0, 0, 0, 0,  0,
-                                    0,  0, 0, 0, 1, 0, 24, 0};
-
-    std::cout << width << ", " << height << std::endl;
-    std::cout << file_size << std::endl;
-    bmp_header[2] = static_cast<unsigned char>(file_size);
-    bmp_header[3] = static_cast<unsigned char>(file_size >> 8);
-    bmp_header[4] = static_cast<unsigned char>(file_size >> 16);
-    bmp_header[5] = static_cast<unsigned char>(file_size >> 24);
-
-    dib_header[4] = static_cast<unsigned char>(width);
-    dib_header[5] = static_cast<unsigned char>(width >> 8);
-    dib_header[6] = static_cast<unsigned char>(width >> 16);
-    dib_header[7] = static_cast<unsigned char>(width >> 24);
-
-    dib_header[8] = static_cast<unsigned char>(height);
-    dib_header[9] = static_cast<unsigned char>(height >> 8);
-    dib_header[10] = static_cast<unsigned char>(height >> 16);
-    dib_header[11] = static_cast<unsigned char>(height >> 24);
-
-    dib_header[25] = static_cast<unsigned char>(ppm);
-    dib_header[26] = static_cast<unsigned char>(ppm >> 8);
-    dib_header[27] = static_cast<unsigned char>(ppm >> 16);
-    dib_header[28] = static_cast<unsigned char>(ppm >> 24);
-
-    out_file.write(reinterpret_cast<char *>(bmp_header), 14);
-    out_file.write(reinterpret_cast<char *>(dib_header), 40);
-
-    std::vector<unsigned char> buf(3 * width * height);
-    const char *signed_buf = reinterpret_cast<const char *>(&buf[0]);
-#pragma omp parallel for ordered
-    for (size_t i = 0; i < width * height; ++i) {
+    unsigned char *buf = static_cast<unsigned char *>(
+        malloc(sizeof(unsigned char) * 3 * width * height));
+    for (int i = 0; i < width * height; ++i) {
       buf[3 * i + 0] = static_cast<unsigned char>(floor(data[i].b * 255));
       buf[3 * i + 1] = static_cast<unsigned char>(floor(data[i].g * 255));
       buf[3 * i + 2] = static_cast<unsigned char>(floor(data[i].r * 255));
     }
-    out_file.write(signed_buf, 3L * width * height);
+    const std::string file_name = "output/" + location;
+    stbi_flip_vertically_on_write(true); // First pixel is bottom left.
+    const int result = stbi_write_bmp(file_name.c_str(), width, height, 3,
+                                      static_cast<void *>(buf));
+    free(buf);
+    assert(result);
   }
 }
 

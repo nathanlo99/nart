@@ -2,6 +2,7 @@
 #define COLOR_H
 
 #include <algorithm>
+#include <iostream>
 
 // Stores a single RGB value
 struct Color {
@@ -40,5 +41,7 @@ constexpr Color operator/(const Color &a, const double n) noexcept {
   return {static_cast<float>(a.r / n), static_cast<float>(a.g / n),
           static_cast<float>(a.b / n)};
 }
+
+std::ostream &operator<<(std::ostream &os, const Color &c);
 
 #endif /* end of include guard: COLOR_H */
