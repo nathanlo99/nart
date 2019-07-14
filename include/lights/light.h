@@ -5,12 +5,12 @@
 #include "defs.h"
 #include "vector3f.h"
 
-class World;
+class Scene;
 
 // Base class for all light sources
 class Light {
-  // The world which contains this light
-  World *world = nullptr;
+  // The scene which contains this light
+  Scene *scene = nullptr;
   // The position of the light in space
   Vector3f pos;
 
@@ -24,8 +24,8 @@ public:
   // overloaded for directional lights, multi-colored lights, etc.
   virtual Color getColor(const Vector3f &from) const = 0;
 
-  World *getWorld() const noexcept { return world; }
-  void setWorld(World *world) noexcept { this->world = world; }
+  Scene *getScene() const noexcept { return scene; }
+  void setScene(Scene *scene) noexcept { this->scene = scene; }
 };
 
 #endif /* end of include guard: LIGHT_H */

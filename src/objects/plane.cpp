@@ -10,7 +10,7 @@ std::tuple<double, Color, Vector3f> Plane::intersect(const Ray &ray,
     return {-1, Color::BLACK, {0, 0, 0}};
   // If the intersection point is behind the ray, this returns a negative
   // distance, which is handled correctly as a non-intersection by
-  // World::intersect
+  // Scene::intersect
 
   const double dist = (point - ray.start).dot(normal) / vn;
   if (dist > max_dist)

@@ -1,10 +1,10 @@
 
-#include "world.h"
+#include "scene.h"
 
 #include "defs.h"
 #include <cmath>
 
-Color World::intersect(const Ray &ray, size_t depth) const {
+Color Scene::intersect(const Ray &ray, size_t depth) const {
   if (depth == 0)
     return background;
 
@@ -35,7 +35,7 @@ Color World::intersect(const Ray &ray, size_t depth) const {
   const Ray reflection_ray{intersection_point, reflection_direction};
 
   // Recursively find the reflected color
-  const Color reflected_color = World::intersect(reflection_ray, depth - 1);
+  const Color reflected_color = Scene::intersect(reflection_ray, depth - 1);
 
   // TODO: replace this with Material values
   const double ambient = 0.1, reflect = 0.2, diffuse = 0.7, specular = 0.25,

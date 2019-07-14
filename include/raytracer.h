@@ -4,14 +4,14 @@
 
 #include "camera.h"
 #include "image.h"
-#include "world.h"
+#include "scene.h"
 
 #include <memory>
 #include <string>
 
-class World;
+class Scene;
 
-// Object which, given a world and a camera, traces the scene into an image
+// Object which, given a scene and a camera, traces the scene into an image
 class RayTracer {
   // Screen width and height in pixels
   size_t screen_width = 320, screen_height = 200;
@@ -30,9 +30,9 @@ public:
         horizontal_fov{horizontal_fov} {}
   ~RayTracer() noexcept {}
 
-  // Traces the scene in 'world' as viewed by 'camera' and returns the result as
+  // Traces the scene in 'scene' as viewed by 'camera' and returns the result as
   // an Image
-  Image trace(const Camera &camera, const World &world,
+  Image trace(const Camera &camera, const Scene &scene,
               const std::string &render_name);
 };
 

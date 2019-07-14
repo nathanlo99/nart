@@ -1,6 +1,6 @@
 
-#ifndef WORLD_H
-#define WORLD_H
+#ifndef SCENE_H
+#define SCENE_H
 
 #include "color.h"
 #include "lights/light.h"
@@ -11,7 +11,7 @@
 #include <vector>
 
 // Represents a 3D scene, containing objects and lights
-class World {
+class Scene {
   std::vector<std::unique_ptr<Object>> objects;
   std::vector<std::unique_ptr<Light>> lights;
 
@@ -22,11 +22,11 @@ class World {
   Color background = Color::BLACK;
 
 public:
-  World() {}
-  explicit World(std::vector<std::unique_ptr<Object>> &&objects,
+  Scene() {}
+  explicit Scene(std::vector<std::unique_ptr<Object>> &&objects,
                  std::vector<std::unique_ptr<Light>> &&lights)
       : objects{std::move(objects)}, lights{std::move(lights)} {}
-  ~World() {}
+  ~Scene() {}
 
   void addObject(std::unique_ptr<Object> &&object) {
     objects.push_back(std::move(object));
@@ -36,7 +36,7 @@ public:
     lights.push_back(std::move(light));
   }
 
-  // Returns the color resulting from tracing the specified ray in this world,
+  // Returns the color resulting from tracing the specified ray in this scene,
   // with max recursive depth 'depth'
   Color intersect(const Ray &ray, size_t depth) const;
 };
