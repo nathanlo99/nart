@@ -84,10 +84,19 @@ template <typename T> T inline random(T min, T max) {
 
 // Quality-of-life debugging functions to print tuples and vectors (assumes that
 // operator<< is overloaded for all types)
-template <typename S, typename T, typename U>
-std::ostream &operator<<(std::ostream &os, const std::tuple<S, T, U> &x) {
-  return os << "(" << std::get<0>(x) << ", " << std::get<1>(x) << ", "
-            << std::get<2>(x) << ")";
+template <std::size_t I = 0, typename... Tp>
+inline typename std::enable_if<I == sizeof...(Tp), std::ostream &>::type
+_print_tuple(std::ostream &os, const std::tuple<Tp...> &t) {}
+template <std::size_t I = 0, typename... Tp>
+    inline typename std::enable_if <
+    I<sizeof...(Tp), std::ostream &>::type
+    _print_tuple(std::ostream &os, const std::tuple<Tp...> &t) {
+  os << std::get<I>(t) << ", ";
+  _print_tuple<I + 1, Tp...>(os, t);
+}
+template <typename... Tp>
+std::ostream &operator<<(std::ostream &os, const std::tuple<Tp...> &t) {
+  return _print_tuple(os, t);
 }
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {

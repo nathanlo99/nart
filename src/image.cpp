@@ -13,8 +13,6 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-inline int ceil_div(int a, int b) { return a / b + (a % b != 0); }
-
 // TODO: Something is wrong with the BMP header, look into this at some point
 void Image::write(ImageFormat format, const std::string &location) const {
   if (format == ImageFormat::JPG) {

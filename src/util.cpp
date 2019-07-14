@@ -61,8 +61,7 @@ RawOBJ loadOBJ(const std::string &obj_file_name) {
 
         indices.emplace_back(cur_indices[0], cur_indices[1], cur_indices[2]);
       }
-      // std::cout << cur_line << std::endl;
-      // std::cout << indices << std::endl;
+
       if (indices.size() != 3)
         ERROR("Faces with != 3 vertices not yet supported");
 
