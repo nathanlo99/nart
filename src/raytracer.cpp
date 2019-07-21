@@ -4,7 +4,7 @@
 #include <cmath>
 
 // TODO: toggle between random sampling and uniform square super-sampling
-Image RayTracer::render(const Camera &camera, const World &world,
+Image RayTracer::render(const Camera &camera, const Scene &scene,
                        const std::string &render_name) {
   const Vector3f &camera_position = camera.getP(), &forward = camera.getF(),
                  &right = camera.getR(), &up = camera.getU();
@@ -32,7 +32,7 @@ Image RayTracer::render(const Camera &camera, const World &world,
                              + (x - (screen_width / 2.) + rx) * dx //
                              + (y - (screen_height / 2.) + ry) * dy;
         const Ray ray{camera_position, dir.normalize()};
-        const Color c = world.intersect(ray, max_depth);
+        const Color c = scene.intersect(ray, max_depth);
         result_color = result_color + c;
       }
       result.set(x, y, result_color / (float)(aa_num * aa_num));

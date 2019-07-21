@@ -15,7 +15,7 @@
 // Encapsulates the spectral properties of a material used in Phong shading,
 // currently only used in Model, but can be used to extend existing primitives
 struct Material {
-  std::string name = "default";
+  std::string name = "default_material";
   Color ambient = Color::WHITE, diffuse = Color::WHITE, spectral = Color::WHITE;
   float transparency = 0.f;
   int illum = 0;

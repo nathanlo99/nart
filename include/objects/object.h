@@ -7,14 +7,14 @@
 #include <utility>
 #include <vector>
 
-class World;
+class Scene;
 
 // A base class for all objects with which light can interact.
 class Object {
 
 protected:
-  // The world which contains this object
-  World *world = nullptr;
+  // The scene which contains this object
+  Scene *scene = nullptr;
 
 public:
   Object() {}
@@ -33,8 +33,8 @@ public:
   virtual std::tuple<Vector3f, Primitive>
   intersect(const Ray &ray, double max_dist) const = 0;
 
-  World *getWorld() const noexcept { return world; }
-  void setWorld(World *world) noexcept { this->world = world; }
+  Scene *getScene() const noexcept { return scene; }
+  void setScene(Scene *scene) noexcept { this->scene = scene; }
 };
 
 #endif
