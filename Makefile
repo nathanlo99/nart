@@ -1,16 +1,16 @@
 
-CC := clang++
+CC := /usr/local/Cellar/gcc/9.1.0/bin/g++-9 
 
 TARGET := bin/raytracer
 SOURCES := $(shell find src -type f -name *.cpp)
 OBJECTS := $(patsubst src/%,build/%,$(SOURCES:.cpp=.o))
 DEPENDS := ${OBJECTS:.o=.d}
-FASTFLAGS := -flto -fwhole-program-vtables -Ofast -march=native
+FASTFLAGS := -flto -Ofast -march=native
 DEBUGFLAGS := -fsanitize=undefined,nullability -fno-omit-frame-pointer -O2 -g -Wall -Wextra -pedantic -Wconversion -Wunreachable-code -Wuninitialized -Wold-style-cast -Wno-error=unused-parameter -Wno-error=unused-variable -Weffc++ -Wfloat-equal -Wmost
 
 CFLAGS := -std=c++17 -fopenmp -D_GLIBCXX_PARALLEL -MMD -DLOG $(FASTFLAGS)
 
-LIB := -lbenchmark -pthread -lc++abi
+LIB := -pthread -lc++abi
 INC := -I include
 
 $(TARGET): $(OBJECTS)
@@ -43,7 +43,7 @@ todo:
 
 benchmark: $(OBJECTS:build/main.o=)
 	@clang++ $(CFLAGS) -c test/benchmark.cpp -Iinclude -o build/benchmark.o
-	@clang++ $(CFLAGS) $(OBJECTS:build/main.o=build/benchmark.o) -o bin/benchmark $(LIB)
+	@clang++ $(CFLAGS) $(OBJECTS:build/main.o=build/benchmark.o) -o bin/benchmark -lbenchmark $(LIB)
 	bin/benchmark
 
 profile: $(TARGET)

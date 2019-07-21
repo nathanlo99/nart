@@ -4,13 +4,15 @@
 #include <cmath>
 
 // TODO: toggle between random sampling and uniform square super-sampling
-Image RayTracer::trace(const Camera &camera, const World &world,
+Image RayTracer::render(const Camera &camera, const World &world,
                        const std::string &render_name) {
   const Vector3f &camera_position = camera.getP(), &forward = camera.getF(),
                  &right = camera.getR(), &up = camera.getU();
-  const double space_width = 2 * tan(M_PI * horizontal_fov / 360.);
+  const double space_width = 2 * tan(M_PI * camera.getFOV() / 360.);
   const double pixel_size = space_width / screen_width;
   const Vector3f dx = pixel_size * right, dy = pixel_size * up;
+  const size_t screen_width = camera.getWidth(),
+        screen_height = camera.getHeight();
 
   Image result{screen_height, screen_width};
   const size_t num_pixels = screen_height * screen_width;

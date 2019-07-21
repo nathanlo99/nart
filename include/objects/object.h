@@ -30,7 +30,7 @@ public:
   // If the ray intersects within max_dist of the ray's starting position,
   // returns a pair containing the distance, the color, and the (normalized)
   // normal vector. Otherwise, returns any tuple with a negative distance.
-  virtual std::tuple<double, Color, Vector3f>
+  virtual std::tuple<Vector3f, Primitive>
   intersect(const Ray &ray, double max_dist) const = 0;
 
   World *getWorld() const noexcept { return world; }

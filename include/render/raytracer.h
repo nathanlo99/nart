@@ -2,6 +2,7 @@
 #ifndef RAYTRACER_H
 #define RAYTRACER_H
 
+#include "renderer.h"
 #include "camera.h"
 #include "image.h"
 #include "world.h"
@@ -12,11 +13,7 @@
 class World;
 
 // Object which, given a world and a camera, traces the scene into an image
-class RayTracer {
-  // Screen width and height in pixels
-  size_t screen_width = 320, screen_height = 200;
-  // Horizontal field of view, in degrees
-  double horizontal_fov = 60;
+class RayTracer : public Renderer {
   // Maximum recursive depth, for reflection ray-casts
   size_t max_depth = 10;
   // We super-sample each pixel in a square with aa_num points and average them
