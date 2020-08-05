@@ -9,10 +9,6 @@
 #include "objects/sphere.h"
 #include "raytracer.h"
 #include "scene.h"
-<<<<<<< HEAD
-=======
-#include "vector3.h"
->>>>>>> 997a69e30df785b8cd357e8ddfabc0c7ef7852a1
 
 #include <ctime>
 #include <iostream>
@@ -31,7 +27,6 @@ int main() {
 
   // // Add all sorts of objects
   // scene.addObject(std::make_unique<Sphere>(vec3{0, 0, 0}, 1,
-<<<<<<< HEAD
   // Color::RED)); scene.addObject(
   //     std::make_unique<Sphere>(vec3{1, 0, 0}, 0.5, Color::WHITE));
   // scene.addObject(
@@ -64,46 +59,11 @@ int main() {
   // scene.addObject(
   //     std::make_unique<Sphere>(vec3{-wall_distance, -wall_distance, 0},
   //                              wall_distance * 0.5, Color::WHITE));
-=======
-  // vec3(1.0, 0.0, 0.0))); scene.addObject(
-  //     std::make_unique<Sphere>(vec3{1, 0, 0}, 0.5, vec3(1.0, 1.0, 1.0)));
-  // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{1, 1, 0}, 0.5, vec3(1.0, 1.0, 1.0)));
-  // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{0, 1, 0}, 0.5, vec3::YELLOW));
-  // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{0, -1, 0}, 0.25, vec3(0.0, 1.0, 0.0)));
-
-  scene.addObject(
-      std::make_unique<Plane>(vec3{0, 0, -1}, vec3{0, 0, 1}, vec3()));
-  scene.addObject(std::make_unique<Plane>(vec3{0, wall_distance, 0},
-                                          vec3{0, -1, 0}, vec3()));
-  scene.addObject(std::make_unique<Plane>(vec3{wall_distance, 0, 0},
-                                          vec3{-1, 0, 0}, vec3()));
-  scene.addObject(std::make_unique<Plane>(vec3{0, -wall_distance, 0},
-                                          vec3{0, 1, 0}, vec3()));
-  scene.addObject(std::make_unique<Plane>(vec3{-wall_distance, 0, 0},
-                                          vec3{1, 0, 0}, vec3()));
-
-  // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{wall_distance, wall_distance, 0},
-  //                              wall_distance * 0.5, vec3(1.0, 1.0, 1.0)));
-  // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{-wall_distance, wall_distance, 0},
-  //                              wall_distance * 0.5, vec3(1.0, 1.0, 1.0)));
-  // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{wall_distance, -wall_distance, 0},
-  //                              wall_distance * 0.5, vec3(1.0, 1.0, 1.0)));
-  // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{-wall_distance, -wall_distance, 0},
-  //                              wall_distance * 0.5, vec3(1.0, 1.0, 1.0)));
->>>>>>> 997a69e30df785b8cd357e8ddfabc0c7ef7852a1
 
   scene.addObject(std::make_unique<Model>("pigeon", ModelTraits::OBJ));
   // scene.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
   // Let there be light!
-<<<<<<< HEAD
   scene.addLight(std::make_unique<PointLight>(vec3{distance, 0, distance},
                                               0.3 * Color::WHITE));
   scene.addLight(std::make_unique<PointLight>(vec3{0, distance, distance},
@@ -112,16 +72,6 @@ int main() {
                                               0.3 * Color::BLUE));
   scene.addLight(std::make_unique<PointLight>(vec3{0, -distance, distance},
                                               0.3 * Color::GREEN));
-=======
-  scene.addLight(std::make_unique<PointLight>(vec3{distance, 0.0f, distance},
-                                              0.3f * vec3(1.0, 1.0, 1.0)));
-  scene.addLight(std::make_unique<PointLight>(vec3{0, distance, distance},
-                                              0.3f * vec3(1.0, 0.0, 0.0)));
-  scene.addLight(std::make_unique<PointLight>(vec3{-distance, 0, distance},
-                                              0.3f * vec3(0.0, 0.0, 1.0)));
-  scene.addLight(std::make_unique<PointLight>(vec3{0, -distance, distance},
-                                              0.3f * vec3(0.0, 1.0, 0.0)));
->>>>>>> 997a69e30df785b8cd357e8ddfabc0c7ef7852a1
 
   // Renders 360 frames of our scene in a rotating frame-of-reference
   for (int i = 0; i < 360; ++i) {
@@ -130,15 +80,9 @@ int main() {
     ss << "animate/frame_" << std::setw(3) << std::setfill('0') << i << ".bmp";
     const std::string file_name = ss.str();
 
-<<<<<<< HEAD
     const vec3 camera_loc{distance * sin(M_PI * i / 180.),
                           distance * cos(M_PI * i / 180.),
                           distance / 3. + height_offset};
-=======
-    const vec3 camera_loc{distance * sinf(M_PI * i / 180.0f),
-                          distance * cosf(M_PI * i / 180.0f),
-                          distance / 3.0f + height_offset};
->>>>>>> 997a69e30df785b8cd357e8ddfabc0c7ef7852a1
     const vec3 look_at{0, 0, height_offset};
 
     const Camera camera{camera_loc, look_at};

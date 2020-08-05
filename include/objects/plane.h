@@ -11,7 +11,7 @@ class Plane : public Object {
 
 public:
   Plane(const vec3 &point, const vec3 &normal, const Color &color)
-      : point{point}, normal{glm::normalize(normal)}, color{color} {}
+      : point{point}, normal{glm::normalize(normal)}, color(color) {}
   ~Plane() {}
 
   bool intersects(const Ray &ray, float min_dist,

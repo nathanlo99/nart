@@ -1,4 +1,5 @@
 
+#pragma once
 #include "common.h"
 
 // Encapsulates data about the point from which rays are cast

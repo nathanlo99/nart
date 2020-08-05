@@ -11,7 +11,10 @@ struct Color {
   float r = 0, g = 0, b = 0;
   static const Color RED, GREEN, BLUE, MAGENTA, TURQUOISE, YELLOW, WHITE, BLACK;
 
-  Color(const float r, const float g, const float b) : r(r), g(g), b(b) {}
+  constexpr Color(const float r = 0.0f, const float g = 0.0f,
+                  const float b = 0.0f) noexcept
+      : r(r), g(g), b(b) {}
+  constexpr Color(const Color &other) : r(other.r), g(other.g), b(other.b) {}
   // Clamps the color to ensure that each color channel is between 0 and 1
   // TODO better clamping algorithm
   constexpr Color clamp() const noexcept {

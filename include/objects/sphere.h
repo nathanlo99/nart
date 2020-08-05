@@ -8,11 +8,11 @@
 class Sphere : public Object {
   vec3 center;
   float radius;
-  vec3 color;
+  Color color;
 
 public:
   Sphere(const vec3 &center, float radius, Color color)
-      : center{center}, radius{radius}, color{color} {}
+      : center{center}, radius{radius}, color(color) {}
   ~Sphere() {}
 
   bool intersects(const Ray &ray, float min_dist,

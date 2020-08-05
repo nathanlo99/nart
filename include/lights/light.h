@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include "color.h"
 #include "common.h"
 
