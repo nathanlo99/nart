@@ -1,7 +1,7 @@
 
 #include "image.h"
 
-#include "defs.h"
+#include "common.h"
 
 #include <cmath>
 #include <fstream>

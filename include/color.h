@@ -28,14 +28,10 @@ constexpr Color operator+(const Color &a, const Color &b) noexcept {
 constexpr Color operator*(const float c, const Color &a) noexcept {
   return Color{c * a.r, c * a.g, c * a.b};
 }
-constexpr Color operator*(const double c, const Color &a) noexcept {
-  return Color{static_cast<float>(c * a.r), static_cast<float>(c * a.g),
-               static_cast<float>(c * a.b)};
-}
 
 // Divides a color component-wise (useful when taking averages for
 // anti-aliasing)
-constexpr Color operator/(const Color &a, const double n) noexcept {
+constexpr Color operator/(const Color &a, const float n) noexcept {
   if (n <= 0)
     return a;
   return {static_cast<float>(a.r / n), static_cast<float>(a.g / n),

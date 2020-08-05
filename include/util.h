@@ -11,8 +11,8 @@ RawOBJ loadOBJ(const std::string &obj_file_name);
 
 // Returns true if the specified ray intersects the axis-aligned bounding box
 // specified by opposite corners 'p1' and 'p2'
-bool intersectsAABB(const Ray &ray, const Vector3f &p1, const Vector3f &p2,
-                    const double min_dist = accuracy,
-                    const double max_dist = 10000.0) noexcept;
+bool intersectsAABB(const Ray &ray, const vec3 &p1, const vec3 &p2,
+                    const float min_dist = 0.0f,
+                    const float max_dist = inf) noexcept;
 
 #endif /* end of include guard: UTIL_H */

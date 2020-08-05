@@ -17,7 +17,7 @@ class Scene {
 
   // The rendering distance
   // TODO: perhaps this is more suited for RayTracer?
-  double max_dist = 10000.0;
+  float max_dist = 10000.0;
   // The background color, used when a ray does not intersect any objects
   Color background = Color::BLACK;
 

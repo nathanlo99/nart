@@ -1,33 +1,26 @@
 
 #include "objects/plane.h"
 
-#include "defs.h"
+#include "common.h"
 
-std::tuple<double, Color, Vector3f> Plane::intersect(const Ray &ray,
-                                                     double max_dist) const {
-  const double vn = ray.direction.dot(normal);
+std::tuple<float, Color, vec3> Plane::intersect(const Ray &ray,
+                                                float max_dist) const {
+  const float vn = glm::dot(ray.direction, normal);
   if (fzero(vn))
-    return {-1, Color::BLACK, {0, 0, 0}};
-  // If the intersection point is behind the ray, this returns a negative
-  // distance, which is handled correctly as a non-intersection by
-  // Scene::intersect
+    return no_hit;
 
-  const double dist = (point - ray.start).dot(normal) / vn;
+  const float dist = glm::dot(point - ray.start, normal) / vn;
   if (dist > max_dist)
     return {-1, Color::BLACK, {0, 0, 0}};
 
-  // This simulates a matte reflection!
-  const Vector3f dn =
-      0.00 * Vector3f{random<double>() - 0.5, random<double>() - 0.5,
-                      random<double>() - 0.5};
-  const Vector3f return_normal = (normal + dn).normalize();
+  const vec3 return_normal = glm::normalize(normal);
   return {dist, color, return_normal};
 }
 
-bool Plane::intersects(const Ray &ray, double min_dist, double max_dist) const {
-  const double vn = ray.direction.dot(normal);
+bool Plane::intersects(const Ray &ray, float min_dist, float max_dist) const {
+  const float vn = glm::dot(ray.direction, normal);
   if (fzero(vn))
     return false;
-  const double dist = (point - ray.start).dot(normal) / vn;
+  const float dist = glm::dot(point - ray.start, normal) / vn;
   return dist > min_dist && dist < max_dist;
 }

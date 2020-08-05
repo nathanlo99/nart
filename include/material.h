@@ -2,7 +2,7 @@
 #define MATERIAL_H
 
 #include "color.h"
-#include "defs.h"
+#include "common.h"
 #include "image.h"
 
 #include <string>

@@ -2,7 +2,7 @@
 #include "objects/model.h"
 
 #include "color.h"
-#include "defs.h"
+#include "common.h"
 #include "ray.h"
 #include "util.h"
 
@@ -39,53 +39,56 @@ Model::Model(const std::string &name, ModelTraits option) {
     max_corner = max(max_corner, vertex);
   }
 
-  std::cout << min_corner << ", " << max_corner << std::endl;
+  // std::cout << min_corner << ", " << max_corner << std::endl;
 }
 
-bool Face::intersects(const Ray &ray, double min_dist, double max_dist) const {
-  const double vn = ray.direction.dot(plane_normal);
+bool Face::intersects(const Ray &ray, float min_dist, float max_dist) const {
+  const float vn = glm::dot(ray.direction, plane_normal);
   if (fzero(vn))
     return false;
-  const double dist = (vertex_a - ray.start).dot(plane_normal) / vn;
+  const float dist = glm::dot(vertex_a - ray.start, plane_normal) / vn;
   if (dist < min_dist || dist > max_dist)
     return false;
-  const Vector3f point = ray.start + dist * ray.direction;
-  const double cross1 =
-      (vertex_c - vertex_a).cross(point - vertex_a).dot(plane_normal);
+  const vec3 point = ray.start + dist * ray.direction;
+  const float cross1 =
+      glm::dot(glm::cross(vertex_c - vertex_a, point - vertex_a), plane_normal);
   if (cross1 > 0)
     return false;
-  const double cross2 =
-      (vertex_a - vertex_b).cross(point - vertex_b).dot(plane_normal);
+  const float cross2 =
+      glm::dot(glm::cross(vertex_a - vertex_b, point - vertex_b), plane_normal);
   if (cross2 > 0)
     return false;
-  const double cross3 =
-      (vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal);
+  const float cross3 =
+      glm::dot(glm::cross(vertex_b - vertex_c, point - vertex_c), plane_normal);
   if (cross3 > 0)
     return false;
   return true;
 }
 
-std::tuple<double, Color, Vector3f> Face::intersect(const Ray &ray,
-                                                    double max_dist) const {
-  const double vn = ray.direction.dot(plane_normal);
+std::tuple<float, Color, vec3> Face::intersect(const Ray &ray,
+                                               float max_dist) const {
+  const float vn = glm::dot(ray.direction, plane_normal);
   if (fzero(vn))
-    return {-1, {0, 0, 0}, {0, 0, 0}};
-  const double dist = (vertex_a - ray.start).dot(plane_normal) / vn;
+    return no_hit;
+  const float dist = glm::dot(vertex_a - ray.start, plane_normal) / vn;
   if (dist > max_dist || dist < accuracy)
-    return {-1, {0, 0, 0}, {0, 0, 0}};
-  const Vector3f point = ray.start + dist * ray.direction;
-  if ((vertex_c - vertex_a).cross(point - vertex_a).dot(plane_normal) > 0)
-    return {-1, {0, 0, 0}, {0, 0, 0}};
-  if ((vertex_a - vertex_b).cross(point - vertex_b).dot(plane_normal) > 0)
-    return {-1, {0, 0, 0}, {0, 0, 0}};
-  if ((vertex_b - vertex_c).cross(point - vertex_c).dot(plane_normal) > 0)
-    return {-1, {0, 0, 0}, {0, 0, 0}};
-  if (plane_normal.dot(ray.direction) > 0)
-    return {dist, Color::WHITE, -1 * plane_normal};
+    return no_hit;
+  const vec3 point = ray.start + dist * ray.direction;
+  if (glm::dot(glm::cross(vertex_c - vertex_a, point - vertex_a),
+               plane_normal) > 0)
+    return no_hit;
+  if (glm::dot(glm::cross(vertex_a - vertex_b, point - vertex_b),
+               plane_normal) > 0)
+    return no_hit;
+  if (glm::dot(glm::cross(vertex_b - vertex_c, point - vertex_c),
+               plane_normal) > 0)
+    return no_hit;
+  if (glm::dot(plane_normal, ray.direction) > 0)
+    return {dist, Color::WHITE, -plane_normal};
   return {dist, Color::WHITE, plane_normal};
 }
 
-bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {
+bool Model::intersects(const Ray &ray, float min_dist, float max_dist) const {
   if (!intersectsAABB(ray, min_corner, max_corner, min_dist, max_dist))
     return false;
   for (const auto &face : data) {
@@ -95,15 +98,15 @@ bool Model::intersects(const Ray &ray, double min_dist, double max_dist) const {
   return false;
 }
 
-std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray,
-                                                     double max_dist) const {
+std::tuple<float, Color, vec3> Model::intersect(const Ray &ray,
+                                                float max_dist) const {
   if (!intersectsAABB(ray, min_corner, max_corner, accuracy, max_dist))
-    return {-1, {0, 0, 0}, {0, 0, 0}};
+    return no_hit;
 
-  double closest_dist = max_dist;
+  float closest_dist = max_dist;
   bool intersected = false;
   Color closest_color = Color::BLACK;
-  Vector3f closest_normal;
+  vec3 closest_normal;
 
   // Returns the closest triangle which the ray intersects
   for (const auto &face : data) {
@@ -118,5 +121,5 @@ std::tuple<double, Color, Vector3f> Model::intersect(const Ray &ray,
   if (intersected)
     return {closest_dist, closest_color, closest_normal};
   else
-    return {-1, {0, 0, 0}, {0, 0, 0}};
+    return no_hit;
 }
