@@ -1,5 +1,7 @@
-#ifndef DEFS_H
-#define DEFS_H
+
+#pragma once
+
+#include "vector3.h"
 
 #include <algorithm>
 #include <chrono>
@@ -12,6 +14,11 @@
 #include <tuple>
 #include <type_traits>
 #include <vector>
+
+// Overload 'vec3_implf' and the associated accuracy to which we perform
+// calculations
+using vec3 = vec3_impl<float>;
+#define accuracy 0.01
 
 // ================================= Logging ==================================
 // Gets the current time, in nanoseconds (as a std::chrono::time_point)
@@ -115,5 +122,3 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &v) {
     os << ", " << v[i];
   return os << "]";
 }
-
-#endif /* end of include guard: DEFS_H */

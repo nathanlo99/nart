@@ -6,11 +6,11 @@
 // TODO: toggle between random sampling and uniform square super-sampling
 Image RayTracer::trace(const Camera &camera, const Scene &scene,
                        const std::string &render_name) {
-  const Vector3f &camera_position = camera.getP(), &forward = camera.getF(),
-                 &right = camera.getR(), &up = camera.getU();
-  const double space_width = 2 * tan(M_PI * horizontal_fov / 360.);
-  const double pixel_size = space_width / screen_width;
-  const Vector3f dx = pixel_size * right, dy = pixel_size * up;
+  const vec3 &camera_position = camera.getP(), &forward = camera.getF(),
+             &right = camera.getR(), &up = camera.getU();
+  const float space_width = 2.0f * tan(M_PI * horizontal_fov / 360.);
+  const float pixel_size = space_width / screen_width;
+  const vec3 dx = pixel_size * right, dy = pixel_size * up;
 
   Image result{screen_height, screen_width};
   const size_t num_pixels = screen_height * screen_width;
@@ -20,17 +20,16 @@ Image RayTracer::trace(const Camera &camera, const Scene &scene,
 #pragma omp parallel for schedule(guided) collapse(2)
   for (size_t y = 0; y < screen_height; y++) {
     for (size_t x = 0; x < screen_width; x++) {
-      Color result_color{0, 0, 0};
+      vec3 result_color;
 #pragma omp parallel for
       for (size_t i = 0; i < aa_num * aa_num; i++) {
-        float rx = (double)(i / aa_num) / aa_num,
-              ry = (double)(i % aa_num) / aa_num;
+        float rx = (i / aa_num) / aa_num, ry = (i % aa_num) / aa_num;
         // rx = random<float>(), ry = random<float>();
-        const Vector3f dir = forward                               //
-                             + (x - (screen_width / 2.) + rx) * dx //
-                             + (y - (screen_height / 2.) + ry) * dy;
+        const vec3 dir = forward                                 //
+                         + (x - (screen_width / 2.0f) + rx) * dx //
+                         + (y - (screen_height / 2.0f) + ry) * dy;
         const Ray ray{camera_position, dir.normalize()};
-        const Color c = scene.intersect(ray, max_depth);
+        const vec3 c = scene.intersect(ray, max_depth);
         result_color = result_color + c;
       }
       result.set(x, y, result_color / (float)(aa_num * aa_num));

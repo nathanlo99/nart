@@ -1,26 +1,23 @@
-#ifndef SPHERE_H
-#define SPHERE_H
 
-#include "color.h"
+#pragma once
+
 #include "objects/object.h"
 #include "ray.h"
-#include "vector3f.h"
+#include "vector3.h"
 
 // A 3D sphere with a uniform color.
 class Sphere : public Object {
-  Vector3f center;
+  vec3 center;
   float radius;
-  Color color;
+  vec3 color;
 
 public:
-  Sphere(const Vector3f &center, float radius, Color color)
+  Sphere(const vec3 &center, float radius, vec3 color)
       : center{center}, radius{radius}, color{color} {}
   ~Sphere() {}
 
-  bool intersects(const Ray &ray, double min_dist,
-                  double max_dist) const override;
-  std::tuple<double, Color, Vector3f> intersect(const Ray &ray,
-                                                double max_dist) const override;
+  bool intersects(const Ray &ray, float min_dist,
+                  float max_dist) const override;
+  std::tuple<float, vec3, vec3> intersect(const Ray &ray,
+                                          float max_dist) const override;
 };
-
-#endif

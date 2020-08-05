@@ -13,10 +13,10 @@ RawOBJ loadOBJ(const std::string &obj_file_name) {
   if (!obj_file)
     ERROR("Could not open obj file: " + obj_file_name);
 
-  std::vector<Vector3f> vertices;
+  std::vector<vec3> vertices;
   std::vector<std::tuple<int, int, int>> triangles;
   std::vector<TextureCoord> texture_coords;
-  std::vector<Vector3f> normals;
+  std::vector<vec3> normals;
   std::vector<Face> data;
 
   vertices.emplace_back(0, 0, 0);
@@ -33,7 +33,7 @@ RawOBJ loadOBJ(const std::string &obj_file_name) {
     if (line_kind == "#") { // Comment line
       continue;
     } else if (line_kind == "v") { // Vertex
-      double x = 0, y = 0, z = 0;
+      float x = 0, y = 0, z = 0;
       cur_line_stream >> x >> z >> y;
       vertices.emplace_back(x, y, z);
     } else if (line_kind == "vt") { // Texture coordinates
@@ -41,7 +41,7 @@ RawOBJ loadOBJ(const std::string &obj_file_name) {
       cur_line_stream >> u >> v;
       texture_coords.emplace_back(u, v);
     } else if (line_kind == "vn") { // Normals
-      double x = 0, y = 0, z = 0;
+      float x = 0, y = 0, z = 0;
       cur_line_stream >> x >> y >> z;
       normals.emplace_back(x, y, z);
     } else if (line_kind == "f") { // Face
@@ -68,13 +68,13 @@ RawOBJ loadOBJ(const std::string &obj_file_name) {
       const auto &[v1, vt1, vn1] = indices[0];
       const auto &[v2, vt2, vn2] = indices[1];
       const auto &[v3, vt3, vn3] = indices[2];
-      const Vector3f vertex_a = vertices[v1], vertex_b = vertices[v2],
-                     vertex_c = vertices[v3];
+      const vec3 vertex_a = vertices[v1], vertex_b = vertices[v2],
+                 vertex_c = vertices[v3];
       const TextureCoord texture_a = texture_coords[vt1],
                          texture_b = texture_coords[vt2],
                          texture_c = texture_coords[vt3];
-      const Vector3f normal_a = normals[vn1], normal_b = normals[vn2],
-                     normal_c = normals[vn3];
+      const vec3 normal_a = normals[vn1], normal_b = normals[vn2],
+                 normal_c = normals[vn3];
       triangles.emplace_back(v1, v2, v3);
       data.emplace_back(vertex_a, vertex_b, vertex_c, texture_a, texture_b,
                         texture_c, normal_a, normal_b, normal_c);
@@ -115,9 +115,9 @@ constexpr inline std::pair<float, float> getInterval(const float start,
   }
 }
 
-bool intersectsAABB(const Ray &ray, const Vector3f &p1, const Vector3f &p2,
-                    const double min_dist, const double max_dist) noexcept {
-  float interval_min = std::max(0.0, min_dist), interval_max = max_dist;
+bool intersectsAABB(const Ray &ray, const vec3 &p1, const vec3 &p2,
+                    const float min_dist, const float max_dist) noexcept {
+  float interval_min = std::max(0.0f, min_dist), interval_max = max_dist;
   const auto &[x_min, x_max] =
       getInterval(ray.start.x, ray.direction.x, p1.x, p2.x);
   interval_min = std::max(interval_min, x_min);

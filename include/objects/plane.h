@@ -1,23 +1,21 @@
-#ifndef PLANE_H
-#define PLANE_H
+
+#pragma once
 
 #include "objects/object.h"
 
 // An infinite plane in 3D, with a uniform color.
 class Plane : public Object {
   // A single point on the plane, and any normalized normal vector
-  Vector3f point, normal;
-  Color color;
+  vec3 point, normal;
+  vec3 color;
 
 public:
-  Plane(const Vector3f &point, const Vector3f &normal, const Color &color)
+  Plane(const vec3 &point, const vec3 &normal, const vec3 &color)
       : point{point}, normal{normal.normalize()}, color{color} {}
   ~Plane() {}
 
-  bool intersects(const Ray &ray, double min_dist,
-                  double max_dist) const override;
-  std::tuple<double, Color, Vector3f> intersect(const Ray &ray,
-                                                double max_dist) const override;
+  bool intersects(const Ray &ray, float min_dist,
+                  float max_dist) const override;
+  std::tuple<float, vec3, vec3> intersect(const Ray &ray,
+                                          float max_dist) const override;
 };
-
-#endif /* end of include guard: PLANE_H */

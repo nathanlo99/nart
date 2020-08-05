@@ -1,6 +1,5 @@
 
-#ifndef RAYTRACER_H
-#define RAYTRACER_H
+#pragma once
 
 #include "camera.h"
 #include "image.h"
@@ -16,9 +15,9 @@ class RayTracer {
   // Screen width and height in pixels
   size_t screen_width = 320, screen_height = 200;
   // Horizontal field of view, in degrees
-  double horizontal_fov = 60;
+  float horizontal_fov = 60;
   // Maximum recursive depth, for reflection ray-casts
-  size_t max_depth = 10;
+  size_t max_depth = 100;
   // We super-sample each pixel in a square with aa_num points and average them
   size_t aa_num = 1;
 
@@ -35,5 +34,3 @@ public:
   Image trace(const Camera &camera, const Scene &scene,
               const std::string &render_name);
 };
-
-#endif

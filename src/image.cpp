@@ -21,9 +21,9 @@ void Image::write(ImageFormat format, const std::string &location) const {
     unsigned char *buf = static_cast<unsigned char *>(
         malloc(sizeof(unsigned char) * 3 * width * height));
     for (int i = 0; i < width * height; ++i) {
-      buf[3 * i + 0] = static_cast<unsigned char>(floor(data[i].b * 255));
-      buf[3 * i + 1] = static_cast<unsigned char>(floor(data[i].g * 255));
-      buf[3 * i + 2] = static_cast<unsigned char>(floor(data[i].r * 255));
+      buf[3 * i + 0] = static_cast<unsigned char>(floor(data[i].b * 255.99));
+      buf[3 * i + 1] = static_cast<unsigned char>(floor(data[i].g * 255.99));
+      buf[3 * i + 2] = static_cast<unsigned char>(floor(data[i].r * 255.99));
     }
     const std::string file_name = "output/" + location;
     stbi_flip_vertically_on_write(true); // First pixel is bottom left.
@@ -34,7 +34,7 @@ void Image::write(ImageFormat format, const std::string &location) const {
   }
 }
 
-Color Image::at(float x, float y) const {
+vec3 Image::at(float x, float y) const {
   // TODO
-  return Color{0, 0, 0};
+  return vec3{0, 0, 0};
 }

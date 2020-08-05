@@ -1,7 +1,6 @@
-#ifndef MATERIAL_H
-#define MATERIAL_H
 
-#include "color.h"
+#pragma once
+
 #include "defs.h"
 #include "image.h"
 
@@ -16,10 +15,9 @@
 // currently only used in Model, but can be used to extend existing primitives
 struct Material {
   std::string name = "default_material";
-  Color ambient = Color::WHITE, diffuse = Color::WHITE, spectral = Color::WHITE;
-  float transparency = 0.f;
+  vec3 ambient = vec3(1, 1, 1), diffuse = vec3(1, 1, 1),
+       spectral = vec3(1, 1, 1);
+  float transparency = 0;
   int illum = 0;
   std::shared_ptr<Image> ambient_texture, diffuse_texture;
 };
-
-#endif /* end of include guard: MATERIAL_H */
