@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-std::tuple<float, Color, vec3> Plane::intersect(const Ray &ray,
-                                                float max_dist) const {
+std::tuple<float, vec3, vec3> Plane::intersect(const Ray &ray,
+                                               float max_dist) const {
   const float vn = glm::dot(ray.direction, normal);
   if (fzero(vn))
     return no_hit;

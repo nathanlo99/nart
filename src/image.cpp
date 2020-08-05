@@ -20,7 +20,7 @@ void Image::write(ImageFormat format, const std::string &location) const {
   } else if (format == ImageFormat::BMP) {
     unsigned char *buf = static_cast<unsigned char *>(
         malloc(sizeof(unsigned char) * 3 * width * height));
-    for (int i = 0; i < width * height; ++i) {
+    for (size_t i = 0; i < width * height; ++i) {
       buf[3 * i + 0] = static_cast<unsigned char>(floor(data[i].b * 255.99));
       buf[3 * i + 1] = static_cast<unsigned char>(floor(data[i].g * 255.99));
       buf[3 * i + 2] = static_cast<unsigned char>(floor(data[i].r * 255.99));
@@ -34,7 +34,7 @@ void Image::write(ImageFormat format, const std::string &location) const {
   }
 }
 
-Color Image::at(float x, float y) const {
+vec3 Image::at(float x, float y) const {
   // TODO
-  return Color();
+  return vec3();
 }

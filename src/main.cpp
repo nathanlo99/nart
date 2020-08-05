@@ -27,51 +27,51 @@ int main() {
 
   // // Add all sorts of objects
   // scene.addObject(std::make_unique<Sphere>(vec3{0, 0, 0}, 1,
-  // Color::RED)); scene.addObject(
-  //     std::make_unique<Sphere>(vec3{1, 0, 0}, 0.5, Color::WHITE));
+  // vec3(1.0, 0.0, 0.0))); scene.addObject(
+  //     std::make_unique<Sphere>(vec3{1, 0, 0}, 0.5, vec3(1.0)));
   // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{1, 1, 0}, 0.5, Color::WHITE));
+  //     std::make_unique<Sphere>(vec3{1, 1, 0}, 0.5, vec3(1.0)));
   // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{0, 1, 0}, 0.5, Color::YELLOW));
+  //     std::make_unique<Sphere>(vec3{0, 1, 0}, 0.5, vec3::YELLOW));
   // scene.addObject(
-  //     std::make_unique<Sphere>(vec3{0, -1, 0}, 0.25, Color::GREEN));
+  //     std::make_unique<Sphere>(vec3{0, -1, 0}, 0.25, vec3(0.0, 1.0, 0.0)));
 
   scene.addObject(
-      std::make_unique<Plane>(vec3{0, 0, -1}, vec3{0, 0, 1}, Color::BLACK));
+      std::make_unique<Plane>(vec3{0, 0, -1}, vec3{0, 0, 1}, vec3()));
   scene.addObject(std::make_unique<Plane>(vec3{0, wall_distance, 0},
-                                          vec3{0, -1, 0}, Color::BLACK));
+                                          vec3{0, -1, 0}, vec3()));
   scene.addObject(std::make_unique<Plane>(vec3{wall_distance, 0, 0},
-                                          vec3{-1, 0, 0}, Color::BLACK));
+                                          vec3{-1, 0, 0}, vec3()));
   scene.addObject(std::make_unique<Plane>(vec3{0, -wall_distance, 0},
-                                          vec3{0, 1, 0}, Color::BLACK));
+                                          vec3{0, 1, 0}, vec3()));
   scene.addObject(std::make_unique<Plane>(vec3{-wall_distance, 0, 0},
-                                          vec3{1, 0, 0}, Color::BLACK));
+                                          vec3{1, 0, 0}, vec3()));
 
   // scene.addObject(
   //     std::make_unique<Sphere>(vec3{wall_distance, wall_distance, 0},
-  //                              wall_distance * 0.5, Color::WHITE));
+  //                              wall_distance * 0.5, vec3(1.0)));
   // scene.addObject(
   //     std::make_unique<Sphere>(vec3{-wall_distance, wall_distance, 0},
-  //                              wall_distance * 0.5, Color::WHITE));
+  //                              wall_distance * 0.5, vec3(1.0)));
   // scene.addObject(
   //     std::make_unique<Sphere>(vec3{wall_distance, -wall_distance, 0},
-  //                              wall_distance * 0.5, Color::WHITE));
+  //                              wall_distance * 0.5, vec3(1.0)));
   // scene.addObject(
   //     std::make_unique<Sphere>(vec3{-wall_distance, -wall_distance, 0},
-  //                              wall_distance * 0.5, Color::WHITE));
+  //                              wall_distance * 0.5, vec3(1.0)));
 
   scene.addObject(std::make_unique<Model>("pigeon", ModelTraits::OBJ));
   // scene.addObject(std::make_unique<Model>("sasuke", ModelTraits::MODEL));
 
   // Let there be light!
   scene.addLight(std::make_unique<PointLight>(vec3{distance, 0, distance},
-                                              0.3 * Color::WHITE));
+                                              0.3f * vec3(1.0)));
   scene.addLight(std::make_unique<PointLight>(vec3{0, distance, distance},
-                                              0.3 * Color::RED));
+                                              0.3f * vec3(1.0, 0.0, 0.0)));
   scene.addLight(std::make_unique<PointLight>(vec3{-distance, 0, distance},
-                                              0.3 * Color::BLUE));
+                                              0.3f * vec3(0.0, 0.0, 1.0)));
   scene.addLight(std::make_unique<PointLight>(vec3{0, -distance, distance},
-                                              0.3 * Color::GREEN));
+                                              0.3f * vec3(0.0, 1.0, 0.0)));
 
   // Renders 360 frames of our scene in a rotating frame-of-reference
   for (int i = 0; i < 360; ++i) {

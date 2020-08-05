@@ -1,15 +1,14 @@
 
 #include "objects/sphere.h"
 
-#include "color.h"
 #include "common.h"
 #include "ray.h"
 
 #include <utility>
 #include <vector>
 
-std::tuple<float, Color, vec3> Sphere::intersect(const Ray &ray,
-                                                 float max_dist) const {
+std::tuple<float, vec3, vec3> Sphere::intersect(const Ray &ray,
+                                                float max_dist) const {
   const vec3 d = ray.start - center;
   const float b = glm::dot(d, ray.direction);
   const float c = glm::dot(d, d) - radius * radius;

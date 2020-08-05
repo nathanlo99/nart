@@ -1,7 +1,6 @@
 
 #include "objects/model.h"
 
-#include "color.h"
 #include "common.h"
 #include "ray.h"
 #include "util.h"
@@ -65,8 +64,8 @@ bool Face::intersects(const Ray &ray, float min_dist, float max_dist) const {
   return true;
 }
 
-std::tuple<float, Color, vec3> Face::intersect(const Ray &ray,
-                                               float max_dist) const {
+std::tuple<float, vec3, vec3> Face::intersect(const Ray &ray,
+                                              float max_dist) const {
   const float vn = glm::dot(ray.direction, plane_normal);
   if (fzero(vn))
     return no_hit;
@@ -84,8 +83,8 @@ std::tuple<float, Color, vec3> Face::intersect(const Ray &ray,
                plane_normal) > 0)
     return no_hit;
   if (glm::dot(plane_normal, ray.direction) > 0)
-    return {dist, Color::WHITE, -plane_normal};
-  return {dist, Color::WHITE, plane_normal};
+    return {dist, vec3(1.0), -plane_normal};
+  return {dist, vec3(1.0), plane_normal};
 }
 
 bool Model::intersects(const Ray &ray, float min_dist, float max_dist) const {
@@ -98,14 +97,14 @@ bool Model::intersects(const Ray &ray, float min_dist, float max_dist) const {
   return false;
 }
 
-std::tuple<float, Color, vec3> Model::intersect(const Ray &ray,
-                                                float max_dist) const {
+std::tuple<float, vec3, vec3> Model::intersect(const Ray &ray,
+                                               float max_dist) const {
   if (!intersectsAABB(ray, min_corner, max_corner, accuracy, max_dist))
     return no_hit;
 
   float closest_dist = max_dist;
   bool intersected = false;
-  Color closest_color = Color::BLACK;
+  vec3 closest_color = vec3();
   vec3 closest_normal;
 
   // Returns the closest triangle which the ray intersects

@@ -1,5 +1,5 @@
 
-#include "color.h"
+
 #include "common.h"
 #include "image.h"
 

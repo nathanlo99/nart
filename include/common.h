@@ -1,8 +1,6 @@
 
 #pragma once
 
-#include "color.h"
-
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -10,6 +8,7 @@
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtx/norm.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -18,15 +17,13 @@
 #include <type_traits>
 #include <vector>
 
-// Overload 'vec3_implf' and the associated eps to which we perform
-// calculations
 using value_type = float;
 using vec3 = glm::vec3;
 constexpr value_type accuracy = static_cast<value_type>(0.1);
 constexpr value_type eps = static_cast<value_type>(0.1);
 constexpr value_type inf = std::numeric_limits<value_type>::infinity();
-constexpr std::tuple<float, Color, vec3> no_hit =
-    std::make_tuple(-1.0f, Color(), vec3());
+constexpr std::tuple<float, vec3, vec3> no_hit =
+    std::make_tuple(-1.0f, vec3(), vec3());
 
 // ================================= Logging ==================================
 // Gets the current time, in nanoseconds (as a std::chrono::time_point)

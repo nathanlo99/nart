@@ -17,7 +17,7 @@ class Scene {
   // TODO: perhaps this is more suited for RayTracer?
   float max_dist = inf;
   // The background color, used when a ray does not intersect any objects
-  Color background;
+  vec3 background;
 
 public:
   Scene() {}
@@ -36,5 +36,5 @@ public:
 
   // Returns the color resulting from tracing the specified ray in this scene,
   // with max recursive depth 'depth'
-  Color intersect(const Ray &ray, size_t depth) const;
+  vec3 intersect(const Ray &ray, size_t depth) const;
 };

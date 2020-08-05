@@ -4,7 +4,6 @@
 #include <tuple>
 #include <vector>
 
-#include "color.h"
 #include "common.h"
 #include "image.h"
 #include "material.h"
@@ -38,26 +37,26 @@ struct Face : public Object {
   Material material;
 
   Face(const vec3 &a, const vec3 &b, const vec3 &c) noexcept
-      : vertex_a{a}, vertex_b{b}, vertex_c{c}, plane_normal{glm::normalize(
-                                                   glm::cross(b - a, c - a))},
-        normal_a{plane_normal}, normal_b{plane_normal}, normal_c{plane_normal},
-        material{} {}
+      : vertex_a(a), vertex_b(b), vertex_c(c),
+        plane_normal(glm::normalize(glm::cross(b - a, c - a))),
+        normal_a(plane_normal), normal_b(plane_normal),
+        normal_c(plane_normal), material{} {}
 
   Face(const vec3 &a, const vec3 &b, const vec3 &c, TextureCoord texture_a,
        TextureCoord texture_b, TextureCoord texture_c, const vec3 &normal_a,
        const vec3 &normal_b, const vec3 &normal_c) noexcept
-      : vertex_a{a}, vertex_b{b}, vertex_c{c}, plane_normal{glm::normalize(
-                                                   glm::cross(b - a, c - a))},
-        normal_a{normal_a}, normal_b{normal_b}, normal_c{normal_c},
-        texture_a{texture_a}, texture_b{texture_b}, texture_c{texture_c} {
+      : vertex_a(a), vertex_b(b), vertex_c(c),
+        plane_normal(glm::normalize(glm::cross(b - a, c - a))),
+        normal_a(normal_a), normal_b(normal_b), normal_c(normal_c),
+        texture_a(texture_a), texture_b(texture_b), texture_c(texture_c) {
     if (fzero(glm::length(normal_a)))
       this->normal_a = this->normal_b = this->normal_c = plane_normal;
   }
 
   bool intersects(const Ray &ray, float min_dist,
                   float max_dist) const override;
-  std::tuple<float, Color, vec3> intersect(const Ray &ray,
-                                           float max_dist) const override;
+  std::tuple<float, vec3, vec3> intersect(const Ray &ray,
+                                          float max_dist) const override;
 };
 
 struct RawOBJ {
@@ -84,6 +83,6 @@ public:
 
   bool intersects(const Ray &ray, float min_dist,
                   float max_dist) const override;
-  std::tuple<float, Color, vec3> intersect(const Ray &ray,
-                                           float max_dist) const override;
+  std::tuple<float, vec3, vec3> intersect(const Ray &ray,
+                                          float max_dist) const override;
 };

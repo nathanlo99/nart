@@ -1,4 +1,6 @@
 
+#include "common.h"
+
 #include "raytracer.h"
 
 #include <cmath>
@@ -20,16 +22,15 @@ Image RayTracer::trace(const Camera &camera, const Scene &scene,
 #pragma omp parallel for schedule(guided) collapse(2)
   for (size_t y = 0; y < screen_height; y++) {
     for (size_t x = 0; x < screen_width; x++) {
-      Color result_color;
-#pragma omp parallel for
+      vec3 result_color = vec3();
       for (size_t i = 0; i < aa_num * aa_num; i++) {
         const float rx = (i / aa_num) / aa_num, ry = (i % aa_num) / aa_num;
         const vec3 dir = forward                                 //
                          + (x - (screen_width / 2.0f) + rx) * dx //
                          + (y - (screen_height / 2.0f) + ry) * dy;
         const Ray ray{camera_position, glm::normalize(dir)};
-        const Color c = scene.intersect(ray, max_depth);
-        result_color = result_color + c;
+        const vec3 c = scene.intersect(ray, max_depth);
+        result_color += c;
       }
       result.set(x, y, result_color / (float)(aa_num * aa_num));
 
