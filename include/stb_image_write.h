@@ -94,7 +94,7 @@ to -1; set to 0..5 to force a filter mode
    is a rectangle of pixels stored from left-to-right, top-to-bottom.
    Each pixel contains 'comp' channels of data stored interleaved with 8-bits
    per channel, in the following order: 1=Y, 2=YA, 3=RGB, 4=RGBA. (Y is
-   monochrome color.) The rectangle is 'w' pixels wide and 'h' pixels tall.
+   monochrome colour.) The rectangle is 'w' pixels wide and 'h' pixels tall.
    The *data pointer points to the first byte of the top-left-most pixel.
    For PNG, "stride_in_bytes" is the distance in bytes from the first byte of
    a row of pixels to the first byte of the next row of pixels.
@@ -544,11 +544,11 @@ STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp,
 static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp,
                                void *data) {
   int has_alpha = (comp == 2 || comp == 4);
-  int colorbytes = has_alpha ? comp - 1 : comp;
+  int colourbytes = has_alpha ? comp - 1 : comp;
   int format =
-      colorbytes < 2
+      colourbytes < 2
           ? 3
-          : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
+          : 2; // 3 colour channels (RGB/RGBA) = 2, 1 colour channel (Y/YA) = 3
 
   if (y < 0 || x < 0)
     return 0;
@@ -556,13 +556,13 @@ static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp,
   if (!stbi_write_tga_with_rle) {
     return stbiw__outfile(s, -1, -1, x, y, comp, 0, (void *)data, has_alpha, 0,
                           "111 221 2222 11", 0, 0, format, 0, 0, 0, 0, 0, x, y,
-                          (colorbytes + has_alpha) * 8, has_alpha * 8);
+                          (colourbytes + has_alpha) * 8, has_alpha * 8);
   } else {
     int i, j, k;
     int jend, jdir;
 
     stbiw__writef(s, "111 221 2222 11", 0, 0, format + 8, 0, 0, 0, 0, 0, x, y,
-                  (colorbytes + has_alpha) * 8, has_alpha * 8);
+                  (colourbytes + has_alpha) * 8, has_alpha * 8);
 
     if (stbi__flip_vertically_on_write) {
       j = 0;

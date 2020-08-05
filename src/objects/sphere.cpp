@@ -17,9 +17,9 @@ std::tuple<float, vec3, vec3> Sphere::intersect(const Ray &ray,
     return no_hit;
   const float disc = sqrt(t), t1 = -b - disc, t2 = -b + disc;
   if (t1 > 0) {
-    return std::make_tuple(t1, color, glm::normalize(d + t1 * ray.direction));
+    return std::make_tuple(t1, colour, glm::normalize(d + t1 * ray.direction));
   } else if (t2 > 0) {
-    return std::make_tuple(t2, color, glm::normalize(d + t2 * ray.direction));
+    return std::make_tuple(t2, colour, glm::normalize(d + t2 * ray.direction));
   } else {
     return no_hit;
   }

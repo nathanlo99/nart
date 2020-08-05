@@ -15,13 +15,13 @@ RawOBJ loadOBJ(const std::string &obj_file_name) {
 
   std::vector<vec3> vertices;
   std::vector<std::tuple<int, int, int>> triangles;
-  std::vector<TextureCoord> texture_coords;
+  std::vector<vec2> texture_coords;
   std::vector<vec3> normals;
   std::vector<Face> data;
 
-  vertices.emplace_back(0, 0, 0);
-  texture_coords.emplace_back(-1, -1);
-  normals.emplace_back(0, 0, 0);
+  vertices.emplace_back();
+  texture_coords.emplace_back();
+  normals.emplace_back();
 
   std::string cur_line;
   while (std::getline(obj_file, cur_line)) {
@@ -70,9 +70,9 @@ RawOBJ loadOBJ(const std::string &obj_file_name) {
       const auto &[v3, vt3, vn3] = indices[2];
       const vec3 vertex_a = vertices[v1], vertex_b = vertices[v2],
                  vertex_c = vertices[v3];
-      const TextureCoord texture_a = texture_coords[vt1],
-                         texture_b = texture_coords[vt2],
-                         texture_c = texture_coords[vt3];
+      const vec2 texture_a = texture_coords[vt1],
+                 texture_b = texture_coords[vt2],
+                 texture_c = texture_coords[vt3];
       const vec3 normal_a = normals[vn1], normal_b = normals[vn2],
                  normal_c = normals[vn3];
       triangles.emplace_back(v1, v2, v3);

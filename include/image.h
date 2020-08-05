@@ -28,7 +28,7 @@ public:
         data(height * width), wrapping{wrapping}, filter{filter} {}
   Image(ImageFormat format, const std::string &location);
 
-  // Returns the color at the specified location, uses the wrapping and
+  // Returns the colour at the specified location, uses the wrapping and
   // interpolation strategies if the pixel is off-bounds or non-integral
   vec3 at(const float x, const float y) const;
 

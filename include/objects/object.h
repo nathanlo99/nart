@@ -27,7 +27,7 @@ public:
                           float max_dist) const = 0;
 
   // If the ray intersects within max_dist of the ray's starting position,
-  // returns a pair containing the distance, the color, and the (normalized)
+  // returns a pair containing the distance, the colour, and the (normalized)
   // normal vector. Otherwise, returns any tuple with a negative distance.
   virtual std::tuple<float, vec3, vec3> intersect(const Ray &ray,
                                                   float max_dist) const = 0;

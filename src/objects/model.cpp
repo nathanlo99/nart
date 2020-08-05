@@ -104,21 +104,21 @@ std::tuple<float, vec3, vec3> Model::intersect(const Ray &ray,
 
   float closest_dist = max_dist;
   bool intersected = false;
-  vec3 closest_color = vec3();
+  vec3 closest_colour = vec3();
   vec3 closest_normal;
 
   // Returns the closest triangle which the ray intersects
   for (const auto &face : data) {
     const auto &intersect_result = face.intersect(ray, closest_dist);
-    const auto &[cur_dist, cur_color, cur_normal] = intersect_result;
+    const auto &[cur_dist, cur_colour, cur_normal] = intersect_result;
     if (cur_dist > accuracy) {
-      std::tie(closest_dist, closest_color, closest_normal) = intersect_result;
+      std::tie(closest_dist, closest_colour, closest_normal) = intersect_result;
       intersected = true;
     }
   }
 
   if (intersected)
-    return {closest_dist, closest_color, closest_normal};
+    return {closest_dist, closest_colour, closest_normal};
   else
     return no_hit;
 }

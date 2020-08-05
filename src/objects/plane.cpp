@@ -14,7 +14,7 @@ std::tuple<float, vec3, vec3> Plane::intersect(const Ray &ray,
     return no_hit;
 
   const vec3 return_normal = glm::normalize(normal);
-  return {dist, color, return_normal};
+  return {dist, colour, return_normal};
 }
 
 bool Plane::intersects(const Ray &ray, float min_dist, float max_dist) const {

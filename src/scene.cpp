@@ -9,7 +9,7 @@ vec3 Scene::intersect(const Ray &ray, size_t depth) const {
     return background;
 
   float dist = max_dist;
-  vec3 ambient_color = background;
+  vec3 ambient_colour = background;
   bool intersected = false;
   vec3 normal = vec3();
 
@@ -18,7 +18,7 @@ vec3 Scene::intersect(const Ray &ray, size_t depth) const {
     const auto &intersection_result = x->intersect(ray, dist);
     const auto &[tmp_dist, tmp_col, tmp_normal] = intersection_result;
     if (tmp_dist > accuracy && tmp_dist < dist) {
-      std::tie(dist, ambient_color, normal) = intersection_result;
+      std::tie(dist, ambient_colour, normal) = intersection_result;
       intersected = true;
     }
   }
@@ -34,19 +34,19 @@ vec3 Scene::intersect(const Ray &ray, size_t depth) const {
       ray.direction - 2 * glm::dot(ray.direction, normal) * normal;
   const Ray reflection_ray{intersection_point, reflection_direction};
 
-  // Recursively find the reflected color
-  const vec3 reflected_color = Scene::intersect(reflection_ray, depth - 1);
+  // Recursively find the reflected colour
+  const vec3 reflected_colour = Scene::intersect(reflection_ray, depth - 1);
 
   // TODO: replace this with Material values
   const float ambient = 0.1, reflect = 0.2, diffuse = 0.7, specular = 0.25,
               alpha = 100;
 
-  vec3 diffuse_color = vec3(), specular_color = vec3();
+  vec3 diffuse_colour = vec3(), specular_colour = vec3();
 
   // For each light, check if the light is in direct line-of-sight, if so, add
   // its luminous effect
   for (const auto &light : lights) {
-    const vec3 light_pos = light->getPos();
+    const vec3 light_pos = light->get_position();
     const float light_dist = glm::length(light_pos - intersection_point);
     const vec3 Lm = glm::normalize(light_pos - intersection_point);
     const vec3 N = glm::normalize(normal);
@@ -65,14 +65,14 @@ vec3 Scene::intersect(const Ray &ray, size_t depth) const {
       }
     }
     if (!obstacles) {
-      const vec3 light_color = light->getvec3(intersection_point);
-      diffuse_color = diffuse_color + cosine_angle * light_color;
+      const vec3 light_colour = light->get_colour(intersection_point);
+      diffuse_colour = diffuse_colour + cosine_angle * light_colour;
       if (glm::dot(Rm, V) > 0)
-        specular_color += (float)pow(glm::dot(Rm, V), alpha) * light_color;
+        specular_colour += glm::pow(glm::dot(Rm, V), alpha) * light_colour;
     }
   }
-  const vec3 result = ambient * ambient_color + reflect * reflected_color +
-                      diffuse * diffuse_color + specular * specular_color;
+  const vec3 result = ambient * ambient_colour + reflect * reflected_colour +
+                      diffuse * diffuse_colour + specular * specular_colour;
   return vec3(std::clamp(result.r, 0.0f, 1.0f),
               std::clamp(result.g, 0.0f, 1.0f),
               std::clamp(result.b, 0.0f, 1.0f));

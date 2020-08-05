@@ -13,15 +13,15 @@ class Light {
   vec3 pos;
 
 public:
-  explicit Light(const vec3 &pos) : pos{pos} {}
+  explicit Light(const vec3 &pos) : pos(pos) {}
   virtual ~Light() {}
 
   // Returns the position of a light, useful to cast a ray towards for shadows
-  vec3 getPos() const noexcept { return pos; }
-  // Returns the color of the light headed in the direction of 'from', can be
-  // overloaded for directional lights, multi-colored lights, etc.
-  virtual vec3 getvec3(const vec3 &from) const = 0;
+  vec3 get_position() const noexcept { return pos; }
+  // Returns the colour of the light headed in the direction of 'from', can be
+  // overloaded for directional lights, multi-coloured lights, etc.
+  virtual vec3 get_colour(const vec3 &from) const = 0;
 
-  Scene *getScene() const noexcept { return scene; }
-  void setScene(Scene *scene) noexcept { this->scene = scene; }
+  Scene *get_scene() const noexcept { return scene; }
+  void set_scene(Scene *scene) noexcept { this->scene = scene; }
 };

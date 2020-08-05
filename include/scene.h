@@ -16,7 +16,7 @@ class Scene {
   // The rendering distance
   // TODO: perhaps this is more suited for RayTracer?
   float max_dist = inf;
-  // The background color, used when a ray does not intersect any objects
+  // The background colour, used when a ray does not intersect any objects
   vec3 background;
 
 public:
@@ -34,7 +34,7 @@ public:
     lights.push_back(std::move(light));
   }
 
-  // Returns the color resulting from tracing the specified ray in this scene,
+  // Returns the colour resulting from tracing the specified ray in this scene,
   // with max recursive depth 'depth'
   vec3 intersect(const Ray &ray, size_t depth) const;
 };
