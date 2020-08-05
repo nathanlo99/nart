@@ -41,7 +41,7 @@ Color Scene::intersect(const Ray &ray, size_t depth) const {
   const float ambient = 0.1, reflect = 0.2, diffuse = 0.7, specular = 0.25,
               alpha = 100;
 
-  Color diffuse_color{0, 0, 0}, specular_color{0, 0, 0};
+  Color diffuse_color, specular_color;
 
   // For each light, check if the light is in direct line-of-sight, if so, add
   // its luminous effect
@@ -74,5 +74,7 @@ Color Scene::intersect(const Ray &ray, size_t depth) const {
   }
   const Color result = ambient * ambient_color + reflect * reflected_color +
                        diffuse * diffuse_color + specular * specular_color;
-  return result.clamp();
+  return Color(std::clamp(result.r, 0.0f, 1.0f),
+               std::clamp(result.g, 0.0f, 1.0f),
+               std::clamp(result.b, 0.0f, 1.0f));
 }

@@ -1,7 +1,8 @@
-#ifndef IMAGE_H
-#define IMAGE_H
 
-#include "color.h"
+#pragma once
+
+#include "common.h"
+
 #include <memory>
 #include <vector>
 
@@ -31,8 +32,7 @@ public:
   // interpolation strategies if the pixel is off-bounds or non-integral
   Color at(float x, float y) const;
 
-  Color &get(size_t x, size_t y) noexcept { return data[y * width + x]; }
-  const Color &get(size_t x, size_t y) const noexcept {
+  const Color get(size_t x, size_t y) const noexcept {
     return data[y * width + x];
   }
   void set(size_t x, size_t y, Color c) noexcept { data[y * width + x] = c; }
@@ -41,5 +41,3 @@ public:
   // relative path rooted at 'output'
   void write(ImageFormat format, const std::string &location) const;
 };
-
-#endif /* end of include guard: IMAGE_H */

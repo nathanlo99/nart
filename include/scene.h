@@ -1,8 +1,6 @@
 
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
-#include "color.h"
 #include "lights/light.h"
 #include "objects/object.h"
 #include "ray.h"
@@ -17,9 +15,9 @@ class Scene {
 
   // The rendering distance
   // TODO: perhaps this is more suited for RayTracer?
-  float max_dist = 10000.0;
+  float max_dist = inf;
   // The background color, used when a ray does not intersect any objects
-  Color background = Color::BLACK;
+  Color background;
 
 public:
   Scene() {}
@@ -40,5 +38,3 @@ public:
   // with max recursive depth 'depth'
   Color intersect(const Ray &ray, size_t depth) const;
 };
-
-#endif

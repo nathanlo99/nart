@@ -1,5 +1,5 @@
-#ifndef RAY_H
-#define RAY_H
+
+#pragma once
 
 #include "common.h"
 
@@ -7,5 +7,3 @@
 struct Ray {
   vec3 start, direction;
 };
-
-#endif /* end of include guard: RAY_H */

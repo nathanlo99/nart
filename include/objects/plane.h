@@ -1,5 +1,5 @@
-#ifndef PLANE_H
-#define PLANE_H
+
+#pragma once
 
 #include "objects/object.h"
 
@@ -19,5 +19,3 @@ public:
   std::tuple<float, Color, vec3> intersect(const Ray &ray,
                                            float max_dist) const override;
 };
-
-#endif /* end of include guard: PLANE_H */

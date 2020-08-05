@@ -1,6 +1,5 @@
-#ifndef MODEL_H
-#define MODEL_H
 
+#pragma once
 #include <string>
 #include <tuple>
 #include <vector>
@@ -88,5 +87,3 @@ public:
   std::tuple<float, Color, vec3> intersect(const Ray &ray,
                                            float max_dist) const override;
 };
-
-#endif

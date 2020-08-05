@@ -11,11 +11,12 @@ struct Color {
   float r = 0, g = 0, b = 0;
   static const Color RED, GREEN, BLUE, MAGENTA, TURQUOISE, YELLOW, WHITE, BLACK;
 
+  Color(const float r, const float g, const float b) : r(r), g(g), b(b) {}
   // Clamps the color to ensure that each color channel is between 0 and 1
   // TODO better clamping algorithm
   constexpr Color clamp() const noexcept {
-    return Color{std::clamp(r, 0.0f, 1.0f), std::clamp(g, 0.0f, 1.0f),
-                 std::clamp(b, 0.0f, 1.0f)};
+    return Color(std::clamp(r, 0.0f, 1.0f), std::clamp(g, 0.0f, 1.0f),
+                 std::clamp(b, 0.0f, 1.0f));
   }
 };
 

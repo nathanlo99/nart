@@ -1,5 +1,5 @@
 
-CC := /usr/local/Cellar/gcc/9.1.0/bin/g++-9
+CC := /usr/local/Cellar/gcc/10.1.0/bin/g++-10
 
 TARGET := bin/raytracer
 SOURCES := $(shell find src -type f -name *.cpp)

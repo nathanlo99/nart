@@ -1,5 +1,3 @@
-#ifndef CAMERA_H
-#define CAMERA_H
 
 #include "common.h"
 
@@ -21,5 +19,3 @@ public:
   const vec3 &getR() const noexcept { return right; }
   const vec3 &getU() const noexcept { return up; }
 };
-
-#endif /* end of include guard: CAMERA_H */
